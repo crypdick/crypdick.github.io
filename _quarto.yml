@@ -8,6 +8,25 @@ website:
       - text: Blog
         href: /
       - about.qmd
+      - text: "Portfolio"
+        menu: 
+          - text: "Code"
+            icon: github
+            href: https://github.com/crypdick
+          - text: "Publications"
+            icon: mortarboard-fill
+            href: https://scholar.google.com/citations?user=4ODJ78oAAAAJ
+          - text: "Resume"
+            icon: file-earmark-person
+            href: /work
+          - text: "Q&A"
+            icon: stack-overflow
+            href: https://stackoverflow.com/users/4212158/crypdick
+          - text: "Photography"
+            icon: camera
+            href: https://www.flickr.com/photos/richarddecal/albums/72157640025469005/
+      - work.qmd
+
   page-footer:
     center:
       - icon: envelope
