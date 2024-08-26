@@ -1,8 +1,8 @@
 ---
 title: Automatically creating Kedro dataset directories 
 subtitle: Avoiding IO errors at the end of pipelines with a simple hook.
-tags: [code]
-date: 2020-11-08
+categories: [code]
+date: "2020-11-08"
 ---
 
 If you use Kedro for data pipelines, you may have had issues saving datasets if the dataset directory does not already exist. Instead of manually creating these data folders, here is a hook which automatically creates any missing directories. In the process, it'll also automatically generate a `.gitkeep` file.
