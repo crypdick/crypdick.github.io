@@ -1,0 +1,72 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Richard Decal",
+    "section": "",
+    "text": "Post With Code\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\nAug 26, 2024\n\n\nHarlow Malloc\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nAug 23, 2024\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/post-with-code/index.html",
+    "href": "posts/post-with-code/index.html",
+    "title": "Post With Code",
+    "section": "",
+    "text": "This is a post with executable code."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About Me",
+    "section": "",
+    "text": "I’m a series of spacetime events called Richard (or Ricardo in some circles). I use machine learning to scale ecosystem restoration using drones."
+  },
+  {
+    "objectID": "about.html#outdoors",
+    "href": "about.html#outdoors",
+    "title": "About Me",
+    "section": "Outdoors",
+    "text": "Outdoors\n\nI spend as much time as possible outdoors. I love hiking, camping, mountain biking, kayaking, and rock climbing."
+  },
+  {
+    "objectID": "about.html#travel",
+    "href": "about.html#travel",
+    "title": "About Me",
+    "section": "Travel",
+    "text": "Travel\n\nI have visited 28+ countries, done 3 major bicycle tours (Seattle ↣ San Francisco, around Taiwan, and around New Zealand), and been to 47 of 50 U.S. states.\nI’ve hitchhiked over 10,000 miles in the US, Taiwan, Thailand, Australia, and New Zealand.\nI converted a jumbo news crew van into a tiny home and lived the van life for 2 years. It had roof solar, a fridge/freezer, and fit everything I owned!"
+  },
+  {
+    "objectID": "about.html#talks-and-interviews",
+    "href": "about.html#talks-and-interviews",
+    "title": "About Me",
+    "section": "Talks and Interviews",
+    "text": "Talks and Interviews\n\nTalk on Data Curation at the AI in Production Conference ’24.\nRay Summit ’21: “How Ray and Anyscale Make it Easy to do Massive-scale ML on Aerial Imagery”\nTalk for TA3M Seattle: “How AI can be abused by surveillance states” (presentation slides)\nInterview with KOMO news in Seattle over the net neutrality debate\nFor my academic/industry talks, please refer to my work page."
+  },
+  {
+    "objectID": "about.html#volunteering",
+    "href": "about.html#volunteering",
+    "title": "About Me",
+    "section": "Volunteering",
+    "text": "Volunteering\n\nI helped organize a Surveillance Self-Defense Workshop for Activists with TA3M Seattle.\nI organized and led a protest against Congress’s plans to end the Internet’s decentralized nature (downtown Seattle, December 2014).\nI volunteered for 1.5 months for a community in Mota Lava, Vanuatu. We brought an oil press to make virgin coconut oil.\nI volunteered for a whale monitoring survey to study how the world’s largest LPG processing center would affect the world’s largest Humpback whale calving area near James Price Point, Australia."
+  },
+  {
+    "objectID": "about.html#art",
+    "href": "about.html#art",
+    "title": "About Me",
+    "section": "Art",
+    "text": "Art\n\nI was Artist in Residence at the Sir James Wallace Arts Trust for a few months in 2015. A selection of my works are in circulation around public spaces in New Zealand. Links to my Flickr below!\nI find the intersection of art and machine learning fascinating. I maintain a repository of research projects and use AI art generators."
+  },
+  {
+    "objectID": "about.html#it",
+    "href": "about.html#it",
+    "title": "About Me",
+    "section": "IT",
+    "text": "IT\n\nSelf-hosted services - My server runs Nextcloud, Plex, a Tor relay, an email server, a ZFS NAS, and more.\nDIY Smart Home - I made various smart-home devices: a smart mirror, automated hydroponics for my garden, a mobile filesharing mesh network, a digitial assistant, and more.\nRemote development - I am persuing the ultimate mobile ergonomic workstation. My current setup is a NReal air headset, a 5G hotspot, and a remote tunnel over Android."
+  },
+  {
+    "objectID": "posts/welcome/index.html",
+    "href": "posts/welcome/index.html",
+    "title": "Welcome To My Blog",
+    "section": "",
+    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+  }
+]
