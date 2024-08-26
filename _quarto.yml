@@ -5,6 +5,8 @@ website:
   title: "Richard Decal"
   navbar:
     right:
+      - text: Blog
+        href: /
       - about.qmd
   page-footer:
     center:
