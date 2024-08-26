@@ -6,12 +6,22 @@ website:
   navbar:
     right:
       - about.qmd
-      - icon: github
-        href: https://github.com/crypdick
-      - icon: twitter
-        href: https://twitter.com/bae_theorem
-      - icon: linkedin
-        href: https://linkedin.com/in/richarddecal
+    page-footer:
+      center:
+        - icon: envelope
+          href: "mailto:public at richarddecal dot com"
+        - icon: github
+          href: https://github.com/crypdick
+        - icon: twitter
+          href: https://twitter.com/bae_theorem
+        - icon: linkedin
+          href: https://linkedin.com/in/richarddecal
+        - icon: stack-overflow
+          href: https://stackoverflow.com/users/4212158/crypdick
+        - icon: mortarboard-fill
+          href: https://scholar.google.com/citations?user=4ODJ78oAAAAJ
+          
+
 format:
   html:
     theme: cosmo
