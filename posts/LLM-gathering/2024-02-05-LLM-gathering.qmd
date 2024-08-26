@@ -207,6 +207,7 @@ Here is the [full chat (spoilers!)](https://gist.github.com/crypdick/201fe370e44
 I made these prompts to make it easier for myself to host meaningful events in the future, and I hope you found them useful. If you have any suggestions for improvements to the prompts, please let me know. I would also love to hear about your experiences using the prompts to plan your own events.
 
 Here are some tips:
+
 - *Refine your prompt iteratively*. When you get a bad output, update your prompt so that future outputs are better.
 - *Add examples to prompts*. This helps the LLM understand what you are asking for.
 - *Break up your prompt into multiple parts*. This helps the LLM to focus on one aspect of the problem at a time.

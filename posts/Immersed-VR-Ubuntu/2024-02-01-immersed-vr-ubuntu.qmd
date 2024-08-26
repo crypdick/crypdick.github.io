@@ -1,5 +1,5 @@
 ---
-title: Getting Immersed VR setup on Ubuntu"
+title: Getting Immersed VR setup on Ubuntu
 subtitle: Documenting how to get Immersed VR working on Ubuntu Linux
 image: /assets/img/DALLE-programmer-VR.png
 categories: [code]
