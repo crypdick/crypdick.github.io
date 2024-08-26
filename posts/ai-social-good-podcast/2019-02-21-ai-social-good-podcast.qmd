@@ -1,0 +1,9 @@
+---
+title: AI for Social Good Podcast Series
+date: "2019-02-21"
+categories: [recommendations]
+---
+
+The This Week in Machine Learning and AI Podcast just did a series of interviews with Microsoft researchers working on making the world a better place with AI.
+
+Check it out at [https://twimlai.com/ai4society/](https://twimlai.com/ai4society/)
