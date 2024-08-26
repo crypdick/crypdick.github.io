@@ -2,7 +2,7 @@
 title: My Work 
 meta-title: Richard Decal - CV - resume 
 meta-description: CV for Richard B. Decal 
-image: "assets/img/AIBS_presentation_crop.jpg"
+image: assets/img/AIBS_presentation_crop.jpg
 ---
 
 ![]("assets/img/AIBS_presentation_crop.jpg")
