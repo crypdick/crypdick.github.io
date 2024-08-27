@@ -3,6 +3,7 @@ project:
 
 website:
   title: "Richard Decal"
+  site-url: https://richarddecal.com
   navbar:
     right:
       - text: Blog
