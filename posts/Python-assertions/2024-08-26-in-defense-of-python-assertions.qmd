@@ -4,7 +4,7 @@ categories: [code]
 date: "2024-08-26"
 ---
 
-# Are assertions evil?
+# Are Python assertions evil?
 
 When new devs join my team, I inevitably hear that assertions are bad. This might be a spicy take, but I'm here to argue that assertions, when used correctly, can be great to use.
 
