@@ -218,8 +218,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="are-assertions-evil" class="level1">
-<h1>Are assertions evil?</h1>
+<section id="are-python-assertions-evil" class="level1">
+<h1>Are Python assertions evil?</h1>
 <p>When new devs join my team, I inevitably hear that assertions are bad. This might be a spicy take, but I’m here to argue that assertions, when used correctly, can be great to use.</p>
 <p>I use Python’s <code>assert</code> statements a lot: for debugging, testing, and documenting assumptions. But before I make my case, let’s steelman the arguments against them.</p>
 </section>
@@ -386,7 +386,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/crypdick\.github\.io\/new-quarto-blog\/");
+      var filterRegex = new RegExp("https:\/\/crypdick\.github\.io\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
