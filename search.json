@@ -46,35 +46,56 @@
     "href": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html",
     "title": "In defense of Python assertions",
     "section": "",
-    "text": "When new people join my team, I almost invariable hear feedback that Python assertions should be avoided. This might be a spicy take, but I disagree, provided that you use assertions correctly.\nI use Python’s assert statements a lot. I use it for debugging, for testing, and for documenting assumptions and expectations.\nHere is how I think assertions can be a useful tool for writing better code. But first, let me try to steelman the argument against assertions."
+    "text": "When new devs join my team, I inevitably hear that assertions are bad. This might be a spicy take, but I’m here to argue that assertions, when used correctly, can be great to use.\nI use Python’s assert statements a lot: for debugging, testing, and documenting assumptions. But before I make my case, let’s steelman the arguments against them."
   },
   {
-    "objectID": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#assertions-can-be-disabled",
-    "href": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#assertions-can-be-disabled",
+    "objectID": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#they-can-be-sneakily-disabled",
+    "href": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#they-can-be-sneakily-disabled",
     "title": "In defense of Python assertions",
-    "section": "Assertions can be disabled",
-    "text": "Assertions can be disabled\nWhen you run Python in optimized mode (python -O), assertions are disabled. This is a big problem if your assertions are crucial for proper execution of your program.\nNow, in my 10 years of Python programming, I have never heard of anyone using the -O flag. However, as a general principle, you shouldn’t ever write something that a downstream team’s decision to change interpreter flags can break your code."
+    "section": "1. They can be sneakily disabled",
+    "text": "1. They can be sneakily disabled\nWhen you run Python in optimized mode (python -O), assertions are disabled. This is bad news if your code relies on them.\nNow, in 10 years of using Python, I’ve never seen anyone use -O. But, we shouldn’t assume that downstream users won’t."
   },
   {
-    "objectID": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#assertions-do-not-raise-meaningful-exceptions",
-    "href": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#assertions-do-not-raise-meaningful-exceptions",
+    "objectID": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#assertionerrors-are-not-very-informative",
+    "href": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#assertionerrors-are-not-very-informative",
     "title": "In defense of Python assertions",
-    "section": "Assertions do not raise meaningful exceptions",
-    "text": "Assertions do not raise meaningful exceptions\nIt’s true that AssertionError stacktraces are not super-informative."
+    "section": "2. AssertionErrors are not very informative",
+    "text": "2. AssertionErrors are not very informative\nThis is true, which is why we should only use it in specific circumstances."
   },
   {
-    "objectID": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#design-by-contract",
-    "href": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#design-by-contract",
+    "objectID": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#design-by-contract-dbc",
+    "href": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#design-by-contract-dbc",
     "title": "In defense of Python assertions",
-    "section": "Design by Contract",
-    "text": "Design by Contract\nDbC is a software engineering methodology that focuses on defining and enforcing specifications for software components. It does this with three main components:\n\nPreconditions: conditions that must be true before a function is called.\nPostconditions: conditions that must be true after a function is called.\nInvariants conditions that must be true throughout the execution of a function.\n\nI use assertions is to document expectations about my code. I find this preferable than writing out the expectations in comments, since the assertions are executable. For example, if I have a function that takes a DataFrame as input, I might write:\ndef fancy_processing(input_df: pd.DataFrame) -&gt; pd.DataFrame:\n    # Validate inputs\n    assert list(input_df.columns) == sorted(input_df.columns), f\"Columns should be sorted: {input_df.columns}\"\n\n    # do some processing\n\n    # Validate outputs\n    assert output_df.columns == input_df.columns, f\"Columns should not change: {output_df.columns} != {input_df.columns}\"\nThis is just an illustrative example. Don’t go overboard exhaustively documenting every assumption, just whatever is useful for future maintainers. E.g. if I had def double_col(df): df[\"col\"] = df[\"col\"] * 2 I wouldn’t write assert \"col\" in df.columns.\nThere are some nice packages for Python DbC that I recommend:\n\nPydantic for dataclasses\nBeartype for strict typing\nPandera for validating DataFrames\n\nI use assertions for DbC in ordinary functions. Yes, am aware of the icontract, but I find that it makes code less readable than using @beartype and assertions."
+    "section": "Design by Contract (DbC)",
+    "text": "Design by Contract (DbC)\nDbC is about defining specs for your code using:\n\nPreconditions: conditions that must be true before a function is called.\nPostconditions: conditions that must be true after a function is called.\nInvariants conditions that must be true throughout the execution of a function.\n\nI use assertions to document these expectations. It’s like executable documentation. For example:\ndef fancy_processing(input_df: pd.DataFrame) -&gt; pd.DataFrame:\n    # Precondition\n    assert list(input_df.columns) == sorted(input_df.columns), f\"Columns should be sorted: {input_df.columns}\"\n\n    # ...processing...\n\n    # Postcondidtion\n    assert output_df.columns == input_df.columns, f\"Columns should not change: {output_df.columns} != {input_df.columns}\"\n    return output_df\nThat’s just an illustrative example, but you don’t want to go overboard with obvious checks. Assert important properties are holding true, not obvious things. As I see it, these assertions should always pass if I implemented my application correctly.\nFor more robust DbC in Python, check out:\n\nPydantic for dataclasses\nBeartype for strict typing\nPandera for validating DataFrames\n\nI am aware of the icontract, but I find that it makes code less readable than using @beartype and assertions."
   },
   {
     "objectID": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#debugging",
     "href": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#debugging",
     "title": "In defense of Python assertions",
     "section": "Debugging",
-    "text": "Debugging\nWhen I am quickly iterating on new code, I use assertions liberally as sanity checks to constrain the search space for bugs. For example, I might check that the shapes and dims of my tensors. This is especially useful when I’m working with a new codebase or when I’m working with a new library. Then, once I am ready to commit my code, I will prune some assertions which aren’t helpful for future maintainers."
+    "text": "Debugging\nWhen I am in the thick of coding, assertions are my sanity checks. Unsure of my tensor shapes? Assert it. Unexpected dtypes? Assert it.\nOnce the code’s working, I’ll prune the less useful asserts. Liberal asserts are useful to constrain the search space of bugs, but you don’t need all of them once the code is more production-ready."
+  },
+  {
+    "objectID": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#handling-production-errors",
+    "href": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#handling-production-errors",
+    "title": "In defense of Python assertions",
+    "section": "Handling production errors",
+    "text": "Handling production errors\nAssertions should never be used to handle errors which are expected to happen in production. For example, never try: ... except AssertionError: .... Instead, use meaningful exceptions."
+  },
+  {
+    "objectID": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#code-that-always-needs-to-run",
+    "href": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#code-that-always-needs-to-run",
+    "title": "In defense of Python assertions",
+    "section": "Code that always needs to run",
+    "text": "Code that always needs to run\nNever use assertions if you have code that must run. For example, don’t use assertions for sanitizing user input."
+  },
+  {
+    "objectID": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#gpu-tensors",
+    "href": "posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html#gpu-tensors",
+    "title": "In defense of Python assertions",
+    "section": "GPU Tensors",
+    "text": "GPU Tensors\nWhen dealing with GPU tensors, you should avoid anything that requires the CPU. Using things like print, .item(), and assert implicitly require a syncronization with the CPU."
   },
   {
     "objectID": "about.html",

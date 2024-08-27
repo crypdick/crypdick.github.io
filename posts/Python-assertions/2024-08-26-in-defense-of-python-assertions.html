@@ -218,60 +218,77 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p>When new people join my team, I almost invariable hear feedback that Python assertions should be avoided. This might be a spicy take, but I disagree, provided that you use assertions correctly.</p>
-<p>I use Python’s <code>assert</code> statements a lot. I use it for debugging, for testing, and for documenting assumptions and expectations.</p>
-<p>Here is how I think assertions can be a useful tool for writing better code. But first, let me try to steelman the argument against assertions.</p>
+<section id="are-assertions-evil" class="level1">
+<h1>Are assertions evil?</h1>
+<p>When new devs join my team, I inevitably hear that assertions are bad. This might be a spicy take, but I’m here to argue that assertions, when used correctly, can be great to use.</p>
+<p>I use Python’s <code>assert</code> statements a lot: for debugging, testing, and documenting assumptions. But before I make my case, let’s steelman the arguments against them.</p>
+</section>
 <section id="the-case-against-assertions" class="level1">
 <h1>The case against assertions</h1>
 <p>Assertions have two downsides, which are valid. Later, I will explain how my usage of assertions mitigates these downsides.</p>
-<section id="assertions-can-be-disabled" class="level2">
-<h2 class="anchored" data-anchor-id="assertions-can-be-disabled">Assertions can be disabled</h2>
-<p>When you run Python in optimized mode (<code>python -O</code>), assertions are disabled. This is a big problem if your assertions are crucial for proper execution of your program.</p>
-<p>Now, in my 10 years of Python programming, I have never heard of anyone using the <code>-O</code> flag. However, as a general principle, you shouldn’t ever write something that a downstream team’s decision to change interpreter flags can break your code.</p>
+<section id="they-can-be-sneakily-disabled" class="level2">
+<h2 class="anchored" data-anchor-id="they-can-be-sneakily-disabled">1. They can be sneakily disabled</h2>
+<p>When you run Python in optimized mode (<code>python -O</code>), assertions are disabled. This is bad news if your code relies on them.</p>
+<p>Now, in 10 years of using Python, I’ve never seen anyone use <code>-O</code>. But, we shouldn’t assume that downstream users won’t.</p>
 </section>
-<section id="assertions-do-not-raise-meaningful-exceptions" class="level2">
-<h2 class="anchored" data-anchor-id="assertions-do-not-raise-meaningful-exceptions">Assertions do not raise meaningful exceptions</h2>
-<p>It’s true that <code>AssertionError</code> stacktraces are not super-informative.</p>
+<section id="assertionerrors-are-not-very-informative" class="level2">
+<h2 class="anchored" data-anchor-id="assertionerrors-are-not-very-informative">2. AssertionErrors are not very informative</h2>
+<p>This is true, which is why we should only use it in specific circumstances.</p>
 </section>
 </section>
-<section id="how-i-like-to-use-assertions" class="level1">
-<h1>How I like to use assertions</h1>
-<section id="design-by-contract" class="level2">
-<h2 class="anchored" data-anchor-id="design-by-contract">Design by Contract</h2>
-<p><a href="https://en.wikipedia.org/wiki/Design_by_contract">DbC</a> is a software engineering methodology that focuses on defining and enforcing specifications for software components. It does this with three main components:</p>
+<section id="how-i-use-assertions" class="level1">
+<h1>How I use assertions</h1>
+<section id="design-by-contract-dbc" class="level2">
+<h2 class="anchored" data-anchor-id="design-by-contract-dbc">Design by Contract (DbC)</h2>
+<p><a href="https://en.wikipedia.org/wiki/Design_by_contract">DbC</a> is about defining specs for your code using:</p>
 <ul>
 <li><em>Preconditions</em>: conditions that must be true before a function is called.</li>
 <li><em>Postconditions</em>: conditions that must be true after a function is called.</li>
 <li><em>Invariants</em> conditions that must be true throughout the execution of a function.</li>
 </ul>
-<p>I use assertions is to document expectations about my code. I find this preferable than writing out the expectations in comments, since the assertions are executable. For example, if I have a function that takes a <code>DataFrame</code> as input, I might write:</p>
+<p>I use assertions to document these expectations. It’s like executable documentation. For example:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fancy_processing(input_df: pd.DataFrame) <span class="op">-&gt;</span> pd.DataFrame:</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Validate inputs</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Precondition</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">list</span>(input_df.columns) <span class="op">==</span> <span class="bu">sorted</span>(input_df.columns), <span class="ss">f"Columns should be sorted: </span><span class="sc">{</span>input_df<span class="sc">.</span>columns<span class="sc">}</span><span class="ss">"</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># do some processing</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ...processing...</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Validate outputs</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> output_df.columns <span class="op">==</span> input_df.columns, <span class="ss">f"Columns should not change: </span><span class="sc">{</span>output_df<span class="sc">.</span>columns<span class="sc">}</span><span class="ss"> != </span><span class="sc">{</span>input_df<span class="sc">.</span>columns<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This is just an illustrative example. Don’t go overboard exhaustively documenting every assumption, just whatever is useful for future maintainers. E.g. if I had <code>def double_col(df): df["col"] = df["col"] * 2</code> I wouldn’t write <code>assert "col" in df.columns</code>.</p>
-<p>There are some nice packages for Python DbC that I recommend:</p>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Postcondidtion</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> output_df.columns <span class="op">==</span> input_df.columns, <span class="ss">f"Columns should not change: </span><span class="sc">{</span>output_df<span class="sc">.</span>columns<span class="sc">}</span><span class="ss"> != </span><span class="sc">{</span>input_df<span class="sc">.</span>columns<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> output_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>That’s just an illustrative example, but you don’t want to go overboard with obvious checks. Assert important properties are holding true, not obvious things. As I see it, these assertions should always pass if I implemented my application correctly.</p>
+<p>For more robust DbC in Python, check out:</p>
 <ul>
 <li><a href="https://docs.pydantic.dev/">Pydantic</a> for dataclasses</li>
 <li><a href="https://beartype.readthedocs.io">Beartype</a> for strict typing</li>
 <li><a href="https://pandera.readthedocs.io">Pandera</a> for validating DataFrames</li>
 </ul>
-<p>I use assertions for DbC in ordinary functions. Yes, am aware of the <a href="https://github.com/Parquery/icontract">icontract</a>, but I find that it makes code less readable than using <code>@beartype</code> and assertions.</p>
+<p>I am aware of the <a href="https://github.com/Parquery/icontract">icontract</a>, but I find that it makes code less readable than using <code>@beartype</code> and assertions.</p>
 </section>
 <section id="debugging" class="level2">
 <h2 class="anchored" data-anchor-id="debugging">Debugging</h2>
-<p>When I am quickly iterating on new code, I use assertions liberally as sanity checks to constrain the search space for bugs. For example, I might check that the shapes and dims of my tensors. This is especially useful when I’m working with a new codebase or when I’m working with a new library. Then, once I am ready to commit my code, I will prune some assertions which aren’t helpful for future maintainers.</p>
+<p>When I am in the thick of coding, assertions are my sanity checks. Unsure of my tensor shapes? Assert it. Unexpected dtypes? Assert it.</p>
+<p>Once the code’s working, I’ll prune the less useful asserts. Liberal asserts are useful to constrain the search space of bugs, but you don’t need all of them once the code is more production-ready.</p>
 </section>
 </section>
 <section id="when-not-to-use-assertions" class="level1">
 <h1>When NOT to use assertions</h1>
-<p>Assertions should never be used to <em>handle errors which are likely to happen in production</em>. For example, avoid <code>try: ... except AssertionError: ...</code> block. Instead, use a <code>try: ... except MeaningfulException: ...</code> block to handle the error.</p>
-<p>Another example is <em>sanitizing inputs</em>. If you are processing a user’s input, <a href="https://xkcd.com/327/">bad things can happen</a>. You should always sanitize inputs, and thus you should never use an assertions which can be disabled.</p>
-<p>I also delete assertions concerning PyTorch tensors that may be located on the GPU. This is because it will greatly slow down the code, since the GPU will have to move data to the CPU and wait for the assertion to be evaluated.</p>
+<section id="handling-production-errors" class="level2">
+<h2 class="anchored" data-anchor-id="handling-production-errors">Handling production errors</h2>
+<p>Assertions should never be used to <em>handle errors which are expected to happen in production</em>. For example, never <code>try: ... except AssertionError: ...</code>. Instead, use meaningful exceptions.</p>
+</section>
+<section id="code-that-always-needs-to-run" class="level2">
+<h2 class="anchored" data-anchor-id="code-that-always-needs-to-run">Code that always needs to run</h2>
+<p>Never use assertions if you have code that must run. For example, don’t use assertions for sanitizing <a href="https://xkcd.com/327/">user input</a>.</p>
+</section>
+<section id="gpu-tensors" class="level2">
+<h2 class="anchored" data-anchor-id="gpu-tensors">GPU Tensors</h2>
+<p>When dealing with GPU tensors, you should avoid anything that requires the CPU. Using things like <code>print</code>, <code>.item()</code>, and <code>assert</code> implicitly require a syncronization with the CPU.</p>
+</section>
+</section>
+<section id="in-conclusion" class="level1">
+<h1>In conclusion</h1>
+<p>Assertions, when used wisely, can make your code self-documenting and easier to debug.</p>
 
 
 </section>
