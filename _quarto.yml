@@ -52,5 +52,6 @@ format:
     css: styles.css
 
 # Ensure that code is only executed locally
+# https://quarto.org/docs/publishing/github-pages.html#freezing-computations
 execute:
   freeze: auto

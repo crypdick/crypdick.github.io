@@ -1,0 +1,8 @@
+---
+title: This post should be hidden
+subtitle: A test
+date: "2024-11-06"
+hidden: true
+---
+
+This post should not appear in the frontpage.
