@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Richard Decal">
+<meta name="dcterms.date" content="2024-02-01">
 
-<title>Richard Decal</title>
+<title>Getting Immersed VR setup on Ubuntu – Richard Decal</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +22,59 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,77 +102,19 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Richard Decal</span>
     </a>
   </div>
@@ -149,11 +125,11 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./"> 
+    <a class="nav-link" href="../"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../about.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -172,7 +148,7 @@ window.Quarto = {
  <span class="dropdown-text">Publications</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./work"><i class="bi bi-file-earmark-person" role="img">
+    <a class="dropdown-item" href="../work"><i class="bi bi-file-earmark-person" role="img">
 </i> 
  <span class="dropdown-text">Resume</span></a>
   </li>  
@@ -189,7 +165,7 @@ window.Quarto = {
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="./work.html"> 
+    <a class="nav-link" href="../work.html"> 
 <span class="menu-text">My Work</span></a>
   </li>  
 </ul>
@@ -202,339 +178,92 @@ window.Quarto = {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">Richard Decal</h1>
-                      </div>
+    <div class="quarto-title column-body">
+      <h1 class="title">Getting Immersed VR setup on Ubuntu</h1>
+            <p class="subtitle lead">Documenting how to get Immersed VR working on Ubuntu Linux</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+              </div>
+                  </div>
   </div>
     
   
-  <div class="quarto-title-meta column-page-left">
+  <div class="quarto-title-meta">
 
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Richard Decal </p>
+            </div>
+    </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 1, 2024</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(9)</span></div><div class="category" data-category="code">code <span class="quarto-category-count">(6)</span></div><div class="category" data-category="notes">notes <span class="quarto-category-count">(1)</span></div><div class="category" data-category="recommendations">recommendations <span class="quarto-category-count">(1)</span></div><div class="category" data-category="roadwarrior">roadwarrior <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 
+<p>In my quest to perfect my “road warrior” setup, I have been experimenting with coding in VR. I have been using the Immersed VR app on my Quest 3 headset to create a virtual workspace. Unfortunately, the official Immersed documentation is not very clear on how to get Immersed VR setup on Ubuntu. Here are the steps I took to get it working. I would like to credit <a href="https://devevangelista.medium.com/immersed-linux-life-bc2e2661c7aa">this blog post by Alexandre Souza</a> for pointing me in the right direction, my contribution is porting the steps to Ubuntu Linux.</p>
+<p>Steps: * Follow the instructions on the <a href="https://immersedvr.com/">Immersed VR website</a> to install the Immersed VR app on your headset and on Linux (<a href="https://immersed.com/download">download page here</a>). * Install the required dependencies:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install v4l2loopback-dkms v4l2loopback-utils</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Create a file to start the v4l2loopback service at boot:</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> vim /etc/systemd/system/v4l2loopback.service</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here are the settings I used for the service file, based on the aforementioned blog post. The device is set to <code>/dev/video9</code> to avoid conflicts with other devices.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">[Unit]</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">Description</span><span class="op">=</span>v4l2loopback</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[Service]</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="va">ExecStart</span><span class="op">=</span>/bin/modprobe <span class="ex">v4l2loopback</span> video_nr=9 card_label=<span class="st">"ImmersedVR"</span> exclusive_caps=1</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="va">ExecStop</span><span class="op">=</span>/bin/rmmod <span class="ex">v4l2loopback</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="va">Type</span><span class="op">=</span>simple</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="va">RemainAfterExit</span><span class="op">=</span>yes</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ex">[Install]</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="va">WantedBy</span><span class="op">=</span>default.target</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Enable the service:</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl enable v4l2loopback</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Start the service:</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl start v4l2loopback</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Update the <code>~/.ImmersedConf</code> file to use the new device:</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># before:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># "CameraDevice": "/dev/video0"</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># after:</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="st">"CameraDevice"</span><span class="ex">:</span> <span class="st">"/dev/video9"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Run the ImmersedVR AppImage:</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x Immersed-x86_64.AppImage</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./Immersed-x86_64.AppImage</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>On my machine, the app will display a “Virtual camera device is not found at /dev/video0” error, even though we set the config file to use <code>/dev/video9</code>. I just click “OK” and the app correctly uses the <code>/dev/video9</code> device.</p>
+<p>Another tip is that you can create virtual monitors, even if you don’t have a physical monitor connected. This is natively supported by the Immersed app on Windows/Mac, but for Linux you need to use a tool like <code>xrandr</code> to create a virtual monitor. <a href="https://www.craigwardman.com/blog/creating-additional-monitors-in-immersed-for-linux">This blog post by Craig Wardman</a> explains how to do it.</p>
 
 
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="code" data-listing-date-sort="1724644800000" data-listing-file-modified-sort="1724766685937" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="491">
-<div class="thumbnail">
-<p><a href="./posts/2024-08-26-in-defense-of-python-assertions.html" class="no-external"></a></p><a href="./posts/2024-08-26-in-defense-of-python-assertions.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/2024-08-26-in-defense-of-python-assertions.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/2024-08-26-in-defense-of-python-assertions.html" class="no-external">In defense of Python assertions</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/2024-08-26-in-defense-of-python-assertions.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
-code
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/2024-08-26-in-defense-of-python-assertions.html" class="no-external">When new devs join my team, I inevitably hear that assertions are bad. This might be a spicy take, but I’m here to argue that assertions, when used correctly, can be great…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/2024-08-26-in-defense-of-python-assertions.html" class="no-external">
-<div class="listing-date">
-Aug 26, 2024
-</div>
-<div class="listing-author">
-Richard Decal
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="code" data-listing-date-sort="1707109200000" data-listing-file-modified-sort="1724698899725" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2486">
-<div class="thumbnail">
-<p><a href="./posts/2024-02-05-LLM-gathering.html" class="no-external"></a></p><a href="./posts/2024-02-05-LLM-gathering.html" class="no-external">
-<p><img loading="lazy" src="./assets/img/Bard-potluck.jpeg" class="thumbnail-image"></p>
-</a><p><a href="./posts/2024-02-05-LLM-gathering.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/2024-02-05-LLM-gathering.html" class="no-external">LLM Assistant for Better Gatherings</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/2024-02-05-LLM-gathering.html" class="no-external">Using a daisy chain of prompts to plan a potluck</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
-code
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/2024-02-05-LLM-gathering.html" class="no-external">I wanted to share my work from an LLM hackathon hosted by Deonna and Nick from AVL Digital Nomads. I recently have been reading <em>“The Art of Gathering”</em> by Priya Parker, which…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/2024-02-05-LLM-gathering.html" class="no-external">
-<div class="listing-date">
-Feb 5, 2024
-</div>
-<div class="listing-author">
-Richard Decal
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="code" data-listing-date-sort="1706763600000" data-listing-file-modified-sort="1724698952197" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="292">
-<div class="thumbnail">
-<p><a href="./posts/2024-02-01-immersed-vr-ubuntu.html" class="no-external"></a></p><a href="./posts/2024-02-01-immersed-vr-ubuntu.html" class="no-external">
-<p><img loading="lazy" src="./assets/img/DALLE-programmer-VR.png" class="thumbnail-image"></p>
-</a><p><a href="./posts/2024-02-01-immersed-vr-ubuntu.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/2024-02-01-immersed-vr-ubuntu.html" class="no-external">Getting Immersed VR setup on Ubuntu</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/2024-02-01-immersed-vr-ubuntu.html" class="no-external">Documenting how to get Immersed VR working on Ubuntu Linux</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
-code
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/2024-02-01-immersed-vr-ubuntu.html" class="no-external">In my quest to perfect my “road warrior” setup, I have been experimenting with coding in VR. I have been using the Immersed VR app on my Quest 3 headset to create a virtual…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/2024-02-01-immersed-vr-ubuntu.html" class="no-external">
-<div class="listing-date">
-Feb 1, 2024
-</div>
-<div class="listing-author">
-Richard Decal
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="code" data-listing-date-sort="1705467600000" data-listing-file-modified-sort="1724698429631" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1860">
-<div class="thumbnail">
-<p><a href="./posts/2024-01-17-Richards-ML-Study-Guide.html" class="no-external"></a></p><a href="./posts/2024-01-17-Richards-ML-Study-Guide.html" class="no-external">
-<p><img loading="lazy" src="./assets/img/humanoid_robot_in_a_cap_and_gown.png" class="thumbnail-image"></p>
-</a><p><a href="./posts/2024-01-17-Richards-ML-Study-Guide.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/2024-01-17-Richards-ML-Study-Guide.html" class="no-external">Richard’s ML Study Guide</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/2024-01-17-Richards-ML-Study-Guide.html" class="no-external">A collection of study materials for machine learning.</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
-code
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/2024-01-17-Richards-ML-Study-Guide.html" class="no-external">I’ve been asked a few times for recommendations on how to get started studying machine learning. I am sharing it here for anyone who is interested, and I will update it as I…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/2024-01-17-Richards-ML-Study-Guide.html" class="no-external">
-<div class="listing-date">
-Jan 17, 2024
-</div>
-<div class="listing-author">
-Richard Decal
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="code" data-listing-date-sort="1606021200000" data-listing-file-modified-sort="1724698443239" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2539">
-<div class="thumbnail">
-<p><a href="./posts/2020-11-22-Howto-stratified-splitting-Multiclass-Multilabeled-image-classification-dataset.html" class="no-external"></a></p><a href="./posts/2020-11-22-Howto-stratified-splitting-Multiclass-Multilabeled-image-classification-dataset.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/2020-11-22-Howto-stratified-splitting-Multiclass-Multilabeled-image-classification-dataset.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/2020-11-22-Howto-stratified-splitting-Multiclass-Multilabeled-image-classification-dataset.html" class="no-external">How to do stratified splitting of Multi-class Multi-labeled image classification data</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/2020-11-22-Howto-stratified-splitting-Multiclass-Multilabeled-image-classification-dataset.html" class="no-external">Complete with code and unit tests.</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
-code
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/2020-11-22-Howto-stratified-splitting-Multiclass-Multilabeled-image-classification-dataset.html" class="no-external">Stratified sampling is imporant when you have extremely unbalanced machine learning datasets to ensure that each class is evenly distributed across your…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/2020-11-22-Howto-stratified-splitting-Multiclass-Multilabeled-image-classification-dataset.html" class="no-external">
-<div class="listing-date">
-Nov 22, 2020
-</div>
-<div class="listing-author">
-Richard Decal
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="code" data-listing-date-sort="1604811600000" data-listing-file-modified-sort="1724697954989" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="443">
-<div class="thumbnail">
-<p><a href="./posts/ai-social-good-podcast/2020-11-08-Automatically-generate-Kedro-dataset-directories.html" class="no-external"></a></p><a href="./posts/ai-social-good-podcast/2020-11-08-Automatically-generate-Kedro-dataset-directories.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/ai-social-good-podcast/2020-11-08-Automatically-generate-Kedro-dataset-directories.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/ai-social-good-podcast/2020-11-08-Automatically-generate-Kedro-dataset-directories.html" class="no-external">Automatically creating Kedro dataset directories</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/ai-social-good-podcast/2020-11-08-Automatically-generate-Kedro-dataset-directories.html" class="no-external">Avoiding IO errors at the end of pipelines with a simple hook.</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
-code
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/ai-social-good-podcast/2020-11-08-Automatically-generate-Kedro-dataset-directories.html" class="no-external">If you use Kedro for data pipelines, you may have had issues saving datasets if the dataset directory does not already exist. Instead of manually creating these data…<code></code></a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/ai-social-good-podcast/2020-11-08-Automatically-generate-Kedro-dataset-directories.html" class="no-external">
-<div class="listing-date">
-Nov 8, 2020
-</div>
-<div class="listing-author">
-Richard Decal
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-listing-date-sort="1567483200000" data-listing-file-modified-sort="1724698270137" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="164">
-<div class="thumbnail">
-<p><a href="./posts/2019-09-03-installing-mosh-server-aws.html" class="no-external"></a></p><a href="./posts/2019-09-03-installing-mosh-server-aws.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/2019-09-03-installing-mosh-server-aws.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/2019-09-03-installing-mosh-server-aws.html" class="no-external">Installing Mosh server on AWS</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/2019-09-03-installing-mosh-server-aws.html" class="no-external">Also works for other VPS</a>
-</div>
-<div class="listing-description">
-<a href="./posts/2019-09-03-installing-mosh-server-aws.html" class="no-external">Mosh (“mobile shell”) is an <code>ssh</code> alternative which is robust to network changes. It is super useful for working on a VPS when you are on a flaky connection or roaming. Here…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/2019-09-03-installing-mosh-server-aws.html" class="no-external">
-<div class="listing-date">
-Sep 3, 2019
-</div>
-<div class="listing-author">
-Richard Decal
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="7" data-categories="notes,roadwarrior" data-listing-date-sort="1559534400000" data-listing-file-modified-sort="1724698411431" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="196">
-<div class="thumbnail">
-<p><a href="./posts/2019-06-03-installing-x2go-server.html" class="no-external"></a></p><a href="./posts/2019-06-03-installing-x2go-server.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/2019-06-03-installing-x2go-server.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/2019-06-03-installing-x2go-server.html" class="no-external">Installing X2go server for i3</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/2019-06-03-installing-x2go-server.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('notes'); return false;">
-notes
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('roadwarrior'); return false;">
-roadwarrior
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/2019-06-03-installing-x2go-server.html" class="no-external">I often like to work remote using a lightweight computer that is connected to a (remote) beefy server. I tried to follow this guide for creating a remote Linux workstation…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/2019-06-03-installing-x2go-server.html" class="no-external">
-<div class="listing-date">
-Jun 3, 2019
-</div>
-<div class="listing-author">
-Richard Decal
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="8" data-categories="recommendations" data-listing-date-sort="1550725200000" data-listing-file-modified-sort="1724697750022" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="32">
-<div class="thumbnail">
-<p><a href="./posts/2019-02-21-ai-social-good-podcast.html" class="no-external"></a></p><a href="./posts/2019-02-21-ai-social-good-podcast.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/2019-02-21-ai-social-good-podcast.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/2019-02-21-ai-social-good-podcast.html" class="no-external">AI for Social Good Podcast Series</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/2019-02-21-ai-social-good-podcast.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('recommendations'); return false;">
-recommendations
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/2019-02-21-ai-social-good-podcast.html" class="no-external">The This Week in Machine Learning and AI Podcast just did a series of interviews with Microsoft researchers working on making the world a better place with AI.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/2019-02-21-ai-social-good-podcast.html" class="no-external">
-<div class="listing-date">
-Feb 21, 2019
-</div>
-<div class="listing-author">
-Richard Decal
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
