@@ -2,6 +2,8 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/example-hidden-post/post.html",
+      "/posts/democrats-and-trump/2024-11-05-democrats-paved-way-for-trump.html",
       "/posts/Python-assertions/2024-08-26-in-defense-of-python-assertions.html",
       "/posts/LLM-gathering/2024-02-05-LLM-gathering.html",
       "/posts/Immersed-VR-Ubuntu/2024-02-01-immersed-vr-ubuntu.html",
