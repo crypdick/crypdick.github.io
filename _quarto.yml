@@ -51,5 +51,6 @@ format:
     theme: cosmo
     css: styles.css
 
-
-
+# Ensure that code is only executed locally
+execute:
+  freeze: auto
