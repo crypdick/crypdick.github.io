@@ -8,3 +8,6 @@ freeze: auto
 title-block-banner: true
 
 author: Richard Decal
+
+# posts labeled as drafts will be rendered but unlinked
+draft-mode: unlinked
