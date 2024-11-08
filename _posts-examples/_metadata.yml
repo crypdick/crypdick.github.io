@@ -2,3 +2,6 @@
 
 # specify all posts in this dir are drafts
 draft: true
+
+# do not render drafts or show them at all
+draft-mode: gone
