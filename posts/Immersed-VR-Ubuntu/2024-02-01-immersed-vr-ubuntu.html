@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Richard Decal">
-<meta name="dcterms.date" content="2019-09-03">
+<meta name="dcterms.date" content="2024-02-01">
 
-<title>Installing Mosh server on AWS – Richard Decal</title>
+<title>Getting Immersed VR setup on Ubuntu – Richard Decal</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,25 +22,59 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -70,7 +104,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-fixed fullcontent">
@@ -80,7 +114,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Richard Decal</span>
     </a>
   </div>
@@ -91,11 +125,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../"> 
+    <a class="nav-link" href="../../"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -114,7 +148,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">Publications</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../work"><i class="bi bi-file-earmark-person" role="img">
+    <a class="dropdown-item" href="../../work"><i class="bi bi-file-earmark-person" role="img">
 </i> 
  <span class="dropdown-text">Resume</span></a>
   </li>  
@@ -131,7 +165,7 @@ ul.task-list li input[type="checkbox"] {
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="../work.html"> 
+    <a class="nav-link" href="../../work.html"> 
 <span class="menu-text">My Work</span></a>
   </li>  
 </ul>
@@ -145,9 +179,12 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Installing Mosh server on AWS</h1>
-            <p class="subtitle lead">Also works for other VPS</p>
-                      </div>
+      <h1 class="title">Getting Immersed VR setup on Ubuntu</h1>
+            <p class="subtitle lead">Documenting how to get Immersed VR working on Ubuntu Linux</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -163,7 +200,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">September 3, 2019</p>
+        <p class="date">February 1, 2024</p>
       </div>
     </div>
     
@@ -182,21 +219,47 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p><a href="mosh.org">Mosh</a> (“mobile shell”) is an <code>ssh</code> alternative which is robust to network changes. It is super useful for working on a VPS when you are on a flaky connection or roaming. Here is how to install Mosh on an AWS EC2 instance.</p>
-<p>First, install and run mosh server:</p>
-<pre><code>sudo add-apt-repository ppa:keithw/mosh
-sudo apt-get update &amp;&amp; sudo apt-get upgrade
-sudo apt-get install mosh
-mosh-server  # start the server</code></pre>
-<p>Next, we need to open up firewall rules. I tried running the following code from another guide, which did not work:</p>
-<pre><code>sudo iptables -I INPUT 1 -p udp --dport 60000:61000 -j ACCEPT</code></pre>
-<p>Instead, I had to go to the AWS EC2 console and to open the rules. On the left, go to “Security Groups”. Select the group. Inside the Inbound tab, click “Edit” then “Add Rule”. You want the following settings:</p>
+<p>In my quest to perfect my “road warrior” setup, I have been experimenting with coding in VR. I have been using the Immersed VR app on my Quest 3 headset to create a virtual workspace. Unfortunately, the official Immersed documentation is not very clear on how to get Immersed VR setup on Ubuntu. Here are the steps I took to get it working. I would like to credit <a href="https://devevangelista.medium.com/immersed-linux-life-bc2e2661c7aa">this blog post by Alexandre Souza</a> for pointing me in the right direction, my contribution is porting the steps to Ubuntu Linux.</p>
+<p>Steps: * Follow the instructions on the <a href="https://immersedvr.com/">Immersed VR website</a> to install the Immersed VR app on your headset and on Linux (<a href="https://immersed.com/download">download page here</a>). * Install the required dependencies:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install v4l2loopback-dkms v4l2loopback-utils</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
-<li>Type: “Custom UDP”</li>
-<li>Port Range: 60000 - 61000</li>
-<li>Source: leave alone (should automatically have “0.0.0.0/0; ::/0”)</li>
+<li>Create a file to start the v4l2loopback service at boot:</li>
 </ul>
-<p>Save, and now you should be able to access your VPS with mosh. Good luck!</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> vim /etc/systemd/system/v4l2loopback.service</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here are the settings I used for the service file, based on the aforementioned blog post. The device is set to <code>/dev/video9</code> to avoid conflicts with other devices.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">[Unit]</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">Description</span><span class="op">=</span>v4l2loopback</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[Service]</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="va">ExecStart</span><span class="op">=</span>/bin/modprobe <span class="ex">v4l2loopback</span> video_nr=9 card_label=<span class="st">"ImmersedVR"</span> exclusive_caps=1</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="va">ExecStop</span><span class="op">=</span>/bin/rmmod <span class="ex">v4l2loopback</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="va">Type</span><span class="op">=</span>simple</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="va">RemainAfterExit</span><span class="op">=</span>yes</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ex">[Install]</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="va">WantedBy</span><span class="op">=</span>default.target</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Enable the service:</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl enable v4l2loopback</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Start the service:</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl start v4l2loopback</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Update the <code>~/.ImmersedConf</code> file to use the new device:</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># before:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># "CameraDevice": "/dev/video0"</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># after:</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="st">"CameraDevice"</span><span class="ex">:</span> <span class="st">"/dev/video9"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Run the ImmersedVR AppImage:</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x Immersed-x86_64.AppImage</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./Immersed-x86_64.AppImage</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>On my machine, the app will display a “Virtual camera device is not found at /dev/video0” error, even though we set the config file to use <code>/dev/video9</code>. I just click “OK” and the app correctly uses the <code>/dev/video9</code> device.</p>
+<p>Another tip is that you can create virtual monitors, even if you don’t have a physical monitor connected. This is natively supported by the Immersed app on Windows/Mac, but for Linux you need to use a tool like <code>xrandr</code> to create a virtual monitor. <a href="https://www.craigwardman.com/blog/creating-additional-monitors-in-immersed-for-linux">This blog post by Craig Wardman</a> explains how to do it.</p>
 
 
 

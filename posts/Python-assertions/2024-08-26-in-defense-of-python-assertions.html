@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Richard Decal">
-<meta name="dcterms.date" content="2019-09-03">
+<meta name="dcterms.date" content="2024-08-26">
 
-<title>Installing Mosh server on AWS – Richard Decal</title>
+<title>In defense of Python assertions – Richard Decal</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,25 +22,59 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -70,7 +104,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-fixed fullcontent">
@@ -80,7 +114,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Richard Decal</span>
     </a>
   </div>
@@ -91,11 +125,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../"> 
+    <a class="nav-link" href="../../"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -114,7 +148,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">Publications</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../work"><i class="bi bi-file-earmark-person" role="img">
+    <a class="dropdown-item" href="../../work"><i class="bi bi-file-earmark-person" role="img">
 </i> 
  <span class="dropdown-text">Resume</span></a>
   </li>  
@@ -131,7 +165,7 @@ ul.task-list li input[type="checkbox"] {
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="../work.html"> 
+    <a class="nav-link" href="../../work.html"> 
 <span class="menu-text">My Work</span></a>
   </li>  
 </ul>
@@ -145,9 +179,11 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Installing Mosh server on AWS</h1>
-            <p class="subtitle lead">Also works for other VPS</p>
-                      </div>
+      <h1 class="title">In defense of Python assertions</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -163,7 +199,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">September 3, 2019</p>
+        <p class="date">August 26, 2024</p>
       </div>
     </div>
     
@@ -182,23 +218,80 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p><a href="mosh.org">Mosh</a> (“mobile shell”) is an <code>ssh</code> alternative which is robust to network changes. It is super useful for working on a VPS when you are on a flaky connection or roaming. Here is how to install Mosh on an AWS EC2 instance.</p>
-<p>First, install and run mosh server:</p>
-<pre><code>sudo add-apt-repository ppa:keithw/mosh
-sudo apt-get update &amp;&amp; sudo apt-get upgrade
-sudo apt-get install mosh
-mosh-server  # start the server</code></pre>
-<p>Next, we need to open up firewall rules. I tried running the following code from another guide, which did not work:</p>
-<pre><code>sudo iptables -I INPUT 1 -p udp --dport 60000:61000 -j ACCEPT</code></pre>
-<p>Instead, I had to go to the AWS EC2 console and to open the rules. On the left, go to “Security Groups”. Select the group. Inside the Inbound tab, click “Edit” then “Add Rule”. You want the following settings:</p>
+<section id="are-python-assertions-evil" class="level1">
+<h1>Are Python assertions evil?</h1>
+<p>When new devs join my team, I inevitably hear that assertions are bad. This might be a spicy take, but I’m here to argue that assertions, when used correctly, can be great to use.</p>
+<p>I use Python’s <code>assert</code> statements a lot: for debugging, testing, and documenting assumptions. But before I make my case, let’s steelman the arguments against them.</p>
+</section>
+<section id="the-case-against-assertions" class="level1">
+<h1>The case against assertions</h1>
+<p>Assertions have two downsides, which are valid. Later, I will explain how my usage of assertions mitigates these downsides.</p>
+<section id="they-can-be-sneakily-disabled" class="level2">
+<h2 class="anchored" data-anchor-id="they-can-be-sneakily-disabled">1. They can be sneakily disabled</h2>
+<p>When you run Python in optimized mode (<code>python -O</code>), assertions are disabled. This is bad news if your code relies on them.</p>
+<p>Now, in 10 years of using Python, I’ve never seen anyone use <code>-O</code>. But, we shouldn’t assume that downstream users won’t.</p>
+</section>
+<section id="assertionerrors-are-not-very-informative" class="level2">
+<h2 class="anchored" data-anchor-id="assertionerrors-are-not-very-informative">2. AssertionErrors are not very informative</h2>
+<p>This is true, which is why we should only use it in specific circumstances.</p>
+</section>
+</section>
+<section id="how-i-use-assertions" class="level1">
+<h1>How I use assertions</h1>
+<section id="design-by-contract-dbc" class="level2">
+<h2 class="anchored" data-anchor-id="design-by-contract-dbc">Design by Contract (DbC)</h2>
+<p><a href="https://en.wikipedia.org/wiki/Design_by_contract">DbC</a> is about defining specs for your code using:</p>
 <ul>
-<li>Type: “Custom UDP”</li>
-<li>Port Range: 60000 - 61000</li>
-<li>Source: leave alone (should automatically have “0.0.0.0/0; ::/0”)</li>
+<li><em>Preconditions</em>: conditions that must be true before a function is called.</li>
+<li><em>Postconditions</em>: conditions that must be true after a function is called.</li>
+<li><em>Invariants</em> conditions that must be true throughout the execution of a function.</li>
 </ul>
-<p>Save, and now you should be able to access your VPS with mosh. Good luck!</p>
+<p>I use assertions to document these expectations. It’s like executable documentation. For example:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fancy_processing(input_df: pd.DataFrame) <span class="op">-&gt;</span> pd.DataFrame:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Precondition</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">list</span>(input_df.columns) <span class="op">==</span> <span class="bu">sorted</span>(input_df.columns), <span class="ss">f"Columns should be sorted: </span><span class="sc">{</span>input_df<span class="sc">.</span>columns<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ...processing...</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Postcondidtion</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> output_df.columns <span class="op">==</span> input_df.columns, <span class="ss">f"Columns should not change: </span><span class="sc">{</span>output_df<span class="sc">.</span>columns<span class="sc">}</span><span class="ss"> != </span><span class="sc">{</span>input_df<span class="sc">.</span>columns<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> output_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>That’s just an illustrative example, but you don’t want to go overboard with obvious checks. Assert important properties are holding true, not obvious things. As I see it, these assertions should always pass if I implemented my application correctly.</p>
+<p>For more robust DbC in Python, check out:</p>
+<ul>
+<li><a href="https://docs.pydantic.dev/">Pydantic</a> for dataclasses</li>
+<li><a href="https://beartype.readthedocs.io">Beartype</a> for strict typing</li>
+<li><a href="https://pandera.readthedocs.io">Pandera</a> for validating DataFrames</li>
+</ul>
+<p>I am aware of the <a href="https://github.com/Parquery/icontract">icontract</a>, but I find that it makes code less readable than using <code>@beartype</code> and assertions.</p>
+</section>
+<section id="debugging" class="level2">
+<h2 class="anchored" data-anchor-id="debugging">Debugging</h2>
+<p>When I am in the thick of coding, assertions are my sanity checks. Unsure of my tensor shapes? Assert it. Unexpected dtypes? Assert it.</p>
+<p>Once the code’s working, I’ll prune the less useful asserts. Liberal asserts are useful to constrain the search space of bugs, but you don’t need all of them once the code is more production-ready.</p>
+</section>
+</section>
+<section id="when-not-to-use-assertions" class="level1">
+<h1>When NOT to use assertions</h1>
+<section id="handling-production-errors" class="level2">
+<h2 class="anchored" data-anchor-id="handling-production-errors">Handling production errors</h2>
+<p>Assertions should never be used to <em>handle errors which are expected to happen in production</em>. For example, never <code>try: ... except AssertionError: ...</code>. Instead, use meaningful exceptions.</p>
+</section>
+<section id="code-that-always-needs-to-run" class="level2">
+<h2 class="anchored" data-anchor-id="code-that-always-needs-to-run">Code that always needs to run</h2>
+<p>Never use assertions if you have code that must run. For example, don’t use assertions for sanitizing <a href="https://xkcd.com/327/">user input</a>.</p>
+</section>
+<section id="gpu-tensors" class="level2">
+<h2 class="anchored" data-anchor-id="gpu-tensors">GPU Tensors</h2>
+<p>When dealing with GPU tensors, you should avoid anything that requires the CPU. Using things like <code>print</code>, <code>.item()</code>, and <code>assert</code> implicitly require a syncronization with the CPU.</p>
+</section>
+</section>
+<section id="in-conclusion" class="level1">
+<h1>In conclusion</h1>
+<p>Assertions, when used wisely, can make your code self-documenting and easier to debug.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

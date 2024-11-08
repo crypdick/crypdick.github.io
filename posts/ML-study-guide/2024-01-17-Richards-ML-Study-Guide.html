@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Richard Decal">
-<meta name="dcterms.date" content="2020-11-08">
+<meta name="dcterms.date" content="2024-01-17">
 
-<title>Automatically creating Kedro dataset directories – Richard Decal</title>
+<title>Richard’s ML Study Guide – Richard Decal</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -179,8 +145,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Automatically creating Kedro dataset directories</h1>
-            <p class="subtitle lead">Avoiding IO errors at the end of pipelines with a simple hook.</p>
+      <h1 class="title">Richard’s ML Study Guide</h1>
+            <p class="subtitle lead">A collection of study materials for machine learning.</p>
                                 <div class="quarto-categories">
                 <div class="quarto-category">code</div>
               </div>
@@ -200,7 +166,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">November 8, 2020</p>
+        <p class="date">January 17, 2024</p>
       </div>
     </div>
     
@@ -219,55 +185,189 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p>If you use Kedro for data pipelines, you may have had issues saving datasets if the dataset directory does not already exist. Instead of manually creating these data folders, here is a hook which automatically creates any missing directories. In the process, it’ll also automatically generate a <code>.gitkeep</code> file.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> kedro.framework.hooks <span class="im">import</span> hook_impl</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>logger <span class="op">=</span> logging.getLogger(<span class="va">__name__</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> CreateDatasetFoldersHook:</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">    For each dataset in the Kedro catalog, recursively create parent directories.</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">    This prevents the sad situation where at the end of a pipeline run, the job fails with an IO error.</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">    See https://discourse.kedro.community/t/how-do-i-access-each-dataset-s-dataset-fpath-attribute/164</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">@staticmethod</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">@hook_impl</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> after_catalog_created(catalog, conf_catalog, conf_creds, feed_dict, save_version, load_versions, run_id):</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        entries <span class="op">=</span> catalog.<span class="bu">list</span>()</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> entry <span class="kw">in</span> entries:</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">try</span>:</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>                dset <span class="op">=</span> <span class="bu">getattr</span>(catalog.datasets, entry)</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="bu">hasattr</span>(dset, <span class="st">"_path"</span>):</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>                    _make_dirs(dset._path)</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>                <span class="cf">elif</span> <span class="bu">hasattr</span>(dset, <span class="st">"_filepath"</span>):</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>                    _make_dirs(dset._filepath)</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>                <span class="co"># some dataset types do not have either of these attributes.</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>:</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">pass</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>            <span class="co"># catalog.list() includes params. These will cause trouble if you try to load</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>            <span class="co"># from the catalog.datasets</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>            <span class="cf">except</span> <span class="pp">AttributeError</span>:</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                <span class="cf">pass</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _make_dirs(path_to_make):</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> os.path.exists(path_to_make):</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="ss">f"Creating missing path </span><span class="sc">{</span>path_to_make<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>        os.makedirs(path_to_make)</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="co"># creates a .gitkeep file while we're at it</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    Path(os.path.join(path_to_make, <span class="st">".gitkeep"</span>)).touch()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Credit to <a href="https://www.youtube.com/c/DataEngineerOne">DataEngineerOne</a>, who guided me in the right direction on the <a href="https://discourse.kedro.community/t/how-do-i-access-each-dataset-s-dataset-fpath-attribute/164/2?u=facepalm">kedro.community forum</a>.</p>
+<p>I’ve been asked a few times for recommendations on how to get started studying machine learning. I am sharing it here for anyone who is interested, and I will update it as I find new resources. This guide is meant for people with little to no experience.</p>
+<section id="math" class="level1">
+<h1>Math</h1>
+<section id="linear-algebra" class="level2">
+<h2 class="anchored" data-anchor-id="linear-algebra">Linear Algebra</h2>
+<p>The most important math for machine learning is linear algebra. I recommend the following resources:</p>
+<section id="essence-of-linear-algebra-3blue1brown-playlist" class="level3">
+<h3 class="anchored" data-anchor-id="essence-of-linear-algebra-3blue1brown-playlist"><a href="https://www.youtube.com/watch?v=fNk_zzaMoSs&amp;list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab&amp;index=1">“Essence of linear algebra” 3Blue1Brown playlist</a></h3>
+<p>This is an excellent playlist that focuses on building intuition for linear algebra. It purposefully avoids computation and instead focuses on the geometric interpretation of linear algebra. I recommend starting here.</p>
+</section>
+<section id="gilbert-strangs-lectures-on-linear-algebra" class="level3">
+<h3 class="anchored" data-anchor-id="gilbert-strangs-lectures-on-linear-algebra"><a href="https://www.youtube.com/watch?v=ZK3O402wf1c&amp;list=PL49CF3715CB9EF31D&amp;index=1">Gilbert Strang’s lectures on Linear Algebra</a></h3>
+<p>Gilbert Strang is a legendary MIT professor. This was one of the original courses posted to MIT OpenCourseWare and is still one of the best. It is a full-length and comprehensive course on linear algebra.</p>
+</section>
+</section>
+<section id="probability-and-statistics" class="level2">
+<h2 class="anchored" data-anchor-id="probability-and-statistics">Probability and Statistics</h2>
+<p>The second most import math for ML is probability and statistics. I recommend the following resources:</p>
+<section id="bayes-theorem-the-geometry-of-changing-beliefs-by-3blue1brown" class="level3">
+<h3 class="anchored" data-anchor-id="bayes-theorem-the-geometry-of-changing-beliefs-by-3blue1brown"><a href="https://www.youtube.com/watch?v=HZGCoVF3YvM">“Bayes theorem, the geometry of changing beliefs” by 3Blue1Brown</a></h3>
+<p>This video is a great introduction to Bayes theorem, one of the most important formulas in statistics. It breaks down each part of the formula, a visual proof of why it is true, and when is it useful.</p>
+</section>
+<section id="an-introduction-to-statistical-learning-with-applications-in-python-by-james-et-al." class="level3">
+<h3 class="anchored" data-anchor-id="an-introduction-to-statistical-learning-with-applications-in-python-by-james-et-al."><a href="https://www.statlearning.com/">“An Introduction to Statistical Learning: with Applications in Python” by James et al.</a></h3>
+<p>This is an excellent book for the foundations of statistics and ML. It is a full book, and one of the most advanced resources on the list, so it is a big time commitment. It assumes a strong background in linear algebra. It covers a broad range of topics, including linear regression, logistic regression, decision trees, random forests, support vector machines, neural networks, clustering, and more.</p>
+<p>It is free to read online and also comes with Python code examples. The first edition of this book, ICLR, covers the same material but is for the R programming language. I definitely recommend the new Python version, ISLP.</p>
+</section>
+</section>
+<section id="calculus" class="level2">
+<h2 class="anchored" data-anchor-id="calculus">Calculus</h2>
+<p>The third most important math for ML is calculus. It is the basis for understanding backpropagation.</p>
+<section id="essence-of-calculus-3blue1brown-playlist" class="level3">
+<h3 class="anchored" data-anchor-id="essence-of-calculus-3blue1brown-playlist"><a href="https://www.youtube.com/watch?v=WUvTyaaNkzM&amp;list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr&amp;index=1">“Essence of calculus” 3Blue1Brown playlist</a></h3>
+<p>This is another excellent series from 3Blue1Brown. Like his “Essence of Linear Algebra” playlist, this one focuses on building intuition for calculus rather than computation. It builds up using thought experiments and visuals in a way that makes you feel like you could’ve discovered calculus for yourself. I recommend starting here.</p>
+</section>
+<section id="gilbert-strangs-highlights-of-calculus-playlist" class="level3">
+<h3 class="anchored" data-anchor-id="gilbert-strangs-highlights-of-calculus-playlist"><a href="https://www.youtube.com/playlist?list=PLBE9407EA64E2C318&amp;index=1">Gilbert Strang’s “Highlights of Calculus” playlist</a></h3>
+<p>I love Gilbert Strang and this is another excellent playlist. This isn’t a full course, but it still a deep dive on calculus. It helped me develop a deeper intuition for calculus.</p>
+</section>
+</section>
+</section>
+<section id="programming" class="level1">
+<h1>Programming</h1>
+<section id="python" class="level2">
+<h2 class="anchored" data-anchor-id="python">Python</h2>
+<p>Python is the most popular language for machine learning. This is really the only language you need to know. I recommend the following resources:</p>
+<section id="automate-the-boring-stuff-with-python-by-al-sweigart" class="level3">
+<h3 class="anchored" data-anchor-id="automate-the-boring-stuff-with-python-by-al-sweigart"><a href="https://automatetheboringstuff.com/">“Automate the Boring Stuff with Python” by Al Sweigart</a></h3>
+<p>I believe that the best way to learn anything is with project-based learning. The nice thing about projects learning is that concrete goals motivate learning in a way that abstract academic texts can’t.</p>
+<p>I like that each chapter is a project that gives you a useful tool that you can use in your daily life. I think everyone should read it for basic programming literacy.</p>
+<p>It is also free to read online.</p>
+</section>
+<section id="codecademy-python-3-course" class="level3">
+<h3 class="anchored" data-anchor-id="codecademy-python-3-course"><a href="https://www.codecademy.com/learn/learn-python-3">Codecademy Python 3 course</a></h3>
+<p>Codecademy is nice because it gives you interactive programming challenges, and helps by pointing out errors. This is a course you can complete in a few days and it will give you a good foundation in Python. It’s also nice that it gives you a virtual Python terminal in your browser, so you don’t have to install anything before you start learning how to code.</p>
+</section>
+</section>
+<section id="other-languages" class="level2">
+<h2 class="anchored" data-anchor-id="other-languages">Other languages</h2>
+<p>The other main programming languages for machine learning are R and Julia.</p>
+<p>Julia is a newer language purpose-built for data science, and it is gaining popularity. I think it is an elegant alternative to Python, however I can’t recommend learning it because almost everyone uses Python.</p>
+<p>R is an older language that is popular in statistics. I really hate R, and I don’t recommend learning it. It is an inelegant language, and it is not as generally useful as Python. I think starting to code with R will teach you terrible coding practices. It does, however, have a tremendous amount of statistical packages. If you are doing a lot of pure statistics, you may want to learn R. Otherwise, I recommend sticking with Python, especially if you are more interested in deep learning.</p>
+</section>
+</section>
+<section id="machine-learning" class="level1">
+<h1>Machine Learning</h1>
+<section id="ml-engineering" class="level2">
+<h2 class="anchored" data-anchor-id="ml-engineering">ML Engineering</h2>
+<section id="machine-learning-engineering-for-production-mlops-course-by-andrew-ng" class="level3">
+<h3 class="anchored" data-anchor-id="machine-learning-engineering-for-production-mlops-course-by-andrew-ng"><a href="https://www.youtube.com/playlist?list=PLkDaE6sCZn6GMoA0wbpJLi3t34Gd8l0aK&amp;index=1">“Machine Learning Engineering for Production (MLOps)” course by Andrew Ng</a></h3>
+<p>This playlist focuses more on the engineering side of machine learning. For example, it covers common pitfalls and challenges when deploying ML models in production. I recommend this playlist for anyone working in an ML-adjacent role, as it gives you the bigger picture of the types of challenges with ML in production. The course claims that it is an intermediate level course, but I think it is accessible for beginners.</p>
+</section>
+<section id="a-recipe-for-training-neural-networks-by-andrej-karpathy" class="level3">
+<h3 class="anchored" data-anchor-id="a-recipe-for-training-neural-networks-by-andrej-karpathy"><a href="https://karpathy.github.io/2019/04/25/recipe/">“A Recipe for Training Neural Networks” by Andrej Karpathy</a></h3>
+<p>This is a short blog post that gives some flavor of challenges in training neural networks, and why they are so difficult to diagnose as compared to other software systems.</p>
+<p>The other blog posts on Andrej Karpathy’s blog are also excellent!</p>
+</section>
+<section id="hidden-technical-debt-in-machine-learning-systems-by-sculley-et-al." class="level3">
+<h3 class="anchored" data-anchor-id="hidden-technical-debt-in-machine-learning-systems-by-sculley-et-al."><a href="https://proceedings.neurips.cc/paper/2015/file/86df7dcfd896fcaf2674f757a2463eba-Paper.pdf">“Hidden Technical Debt in Machine Learning Systems” by Sculley et al.</a></h3>
+<p>This is a seminal academic paper that covers the challenges of ML systems in production, written by a team at Google. One of the main points it makes is that only a small fraction of real-world ML systems are composed of actual ML code. The rest is data collection, data validation, feature extraction, serving infrastructure, monitoring, etc. This is a good paper to read if you want to understand the bigger picture of ML systems, and why they are so difficult to build.</p>
+</section>
+<section id="deep-learning-coursera-specialization-by-andrew-ng" class="level3">
+<h3 class="anchored" data-anchor-id="deep-learning-coursera-specialization-by-andrew-ng">“Deep Learning” Coursera specialization by Andrew Ng</h3>
+<p><a href="https://www.youtube.com/playlist?list=PLkDaE6sCZn6Ec-XTbcX1uRg2_u4xOEky0">Part 1</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLkDaE6sCZn6Hn0vK8co82zjQtt3T2Nkqc">Part 2</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLkDaE6sCZn6E7jZ9sN_xHwSHOdjUxUW_b">Part 3</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLkDaE6sCZn6Gl29AoE31iwdVwSG-KnDzF">Part 4</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLkDaE6sCZn6F6wUI9tvS_Gw1vaFAx6rd6">Part 5</a></p>
+<p>This is the first course added to Coursera by Andrew Ng, and it is still one of the best. It is a great introduction to deep learning theory, and touches on the engineering side of ML as well. It is a bit dated, but it is still a great resource.</p>
+<p>There is a new version of the course (“<a href="https://www.youtube.com/playlist?list=PLkDaE6sCZn6FNC6YRfRQc_FbeQrF8BwGI">Machine Learning Specialization</a>”), but I haven’t watched it yet.</p>
+</section>
+<section id="data-centric-ml-by-andrew-ng" class="level3">
+<h3 class="anchored" data-anchor-id="data-centric-ml-by-andrew-ng"><a href="https://www.youtube.com/watch?v=06-AZXmwHjo">“Data-centric ML” by Andrew Ng</a></h3>
+<p>This is a short but influential talk by Andrew Ng that argues that there is an over-emphasis on model-centric ML, and that data-centric ML is more important. I recommend this talk for anyone who is interested in ML engineering as well as managers that work with ML teams.</p>
+<p>There is an MIT course that is based on this talk: <a href="https://github.com/dcai-course/dcai-lab">“Data-Centric AI” course by MIT</a></p>
+</section>
+</section>
+<section id="deep-learning" class="level2">
+<h2 class="anchored" data-anchor-id="deep-learning">Deep Learning</h2>
+<section id="neural-networks-3blue1brown-playlist" class="level3">
+<h3 class="anchored" data-anchor-id="neural-networks-3blue1brown-playlist"><a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi&amp;index=1">“Neural networks” 3Blue1Brown playlist</a></h3>
+<p>This is a nice visual introduction to what is a neural network, as well as how backpropagation and gradient descent work. 3Blue1Brown is always great.</p>
+</section>
+<section id="but-what-is-a-convolution-by-3blue1brown" class="level3">
+<h3 class="anchored" data-anchor-id="but-what-is-a-convolution-by-3blue1brown"><a href="https://www.youtube.com/watch?v=KuXjwB4LzSA">“But what is a convolution?” by 3Blue1Brown</a></h3>
+<p>Convolutions are a key component of convolutional neural networks, which are the most popular type of neural network for computer vision. This is a nice visual introduction to what is a convolution. Another great video by 3Blue1Brown.</p>
+</section>
+<section id="visualizing-deep-learning-playlist-by-vcubingx" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-deep-learning-playlist-by-vcubingx"><a href="https://www.youtube.com/watch?v=UOvPeC8WOt8&amp;list=PLyPKqVSnetmEOp_g_hfabuRAs9ET-shl_">“Visualizing Deep Learning” playlist by vcubingx</a></h3>
+<p>More visual intuition building for neural networks. This playlist is a bit more advanced than the 3Blue1Brown playlist, but it is still accessible for beginners.</p>
+</section>
+<section id="deep-learning-book-by-ian-goodfellow-et-al." class="level3">
+<h3 class="anchored" data-anchor-id="deep-learning-book-by-ian-goodfellow-et-al."><a href="https://www.deeplearningbook.org/">“Deep Learning” book by Ian Goodfellow et al.</a></h3>
+<p>This is an advanced book on deep learning theory. I’ve mostly read select chapters in Part 2 and Part 3, and it was great. It is free to read online.</p>
+</section>
+<section id="nyu-deep-learning-course-by-yann-lecun-and-alfredo-canziani" class="level3">
+<h3 class="anchored" data-anchor-id="nyu-deep-learning-course-by-yann-lecun-and-alfredo-canziani"><a href="https://www.youtube.com/playlist?list=PLLHTzKZzVU9e6xUfG10TkTWApKSZCzuBI">“NYU Deep Learning” course by Yann LeCun and Alfredo Canziani</a></h3>
+<p>This is a full course on deep learning taught at NYU during COVID. It is a great resource for learning the theory of deep learning. It is a bit more advanced than the Andrew Ng course, but it is still accessible for beginners.</p>
+<p>Alfredo Canziani also is <a href="https://atcold.github.io/book.html">currently writing a book on deep learning theory</a> from an energy perspective. As of right now, it is not finished, but I am excited for it based on the sneak-peaks he has posted on Twitter.</p>
+</section>
+<section id="the-little-book-of-deep-learning-by-françois-fleuret" class="level3">
+<h3 class="anchored" data-anchor-id="the-little-book-of-deep-learning-by-françois-fleuret"><a href="https://fleuret.org/francois/lbdl.html">“The Little Book of Deep Learning” by François Fleuret</a></h3>
+<p>This is a short but dense book on deep learning theory (150 pages). I haven’t finished reading it but it has very nice visualization and explanations.</p>
+<p>This book is available online for free or you can buy a physical copy for $10.</p>
+</section>
+<section id="machine-learning-street-talk-podcast" class="level3">
+<h3 class="anchored" data-anchor-id="machine-learning-street-talk-podcast"><a href="https://www.youtube.com/playlist?list=PLwFLAA-F1Pgo_2NDWE9-l9BZ0sone8ZRY">Machine Learning Street Talk Podcast</a></h3>
+<p>This podcast does long 1-3 hour interviews that go into depth on more advanced topics, such as the spline theory of neural networks. I’ve relistened to various of these interviews, such as with <a href="https://www.youtube.com/watch?v=EXJmodhu4_4&amp;list=PLwFLAA-F1Pgo_2NDWE9-l9BZ0sone8ZRY&amp;index=3&amp;t=1241s&amp;pp=iAQB">Ishan Misra</a>, <a href="https://www.youtube.com/watch?v=86ib0sfdFtw&amp;list=PLwFLAA-F1Pgo_2NDWE9-l9BZ0sone8ZRY&amp;index=1&amp;pp=iAQB">Randall Balestriero</a>, and <a href="https://www.youtube.com/watch?v=1EqJyMy0LnE&amp;list=PLwFLAA-F1Pgo_2NDWE9-l9BZ0sone8ZRY&amp;index=12&amp;t=2407s&amp;pp=iAQB">Simon Kornblith</a>.</p>
+</section>
+</section>
+<section id="large-language-models" class="level2">
+<h2 class="anchored" data-anchor-id="large-language-models">Large Language Models</h2>
+<p>I split off a new section for LLMs since they are all the rage right now.</p>
+<section id="neural-networks-zero-to-hero-playlist-by-andrej-karpathy" class="level3">
+<h3 class="anchored" data-anchor-id="neural-networks-zero-to-hero-playlist-by-andrej-karpathy"><a href="https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ">“Neural Networks: Zero to Hero” playlist by Andrej Karpathy</a></h3>
+<p>This playlist is a “hackers guide” to neural networks, with special attention to language models. It codes end-to-end examples from scratch in pure Python, so while the code is not the fastest it is compact and easy to read. I haven’t watched the whole playlist, but I’ve watched a few videos and they were great (the GPT3 from scratch was fantastic).</p>
+</section>
+<section id="andrew-ng-practical-llm-moocs" class="level3">
+<h3 class="anchored" data-anchor-id="andrew-ng-practical-llm-moocs"><a href="https://www.deeplearning.ai/short-courses/">Andrew Ng Practical LLM MOOCs</a></h3>
+<p>More recently, Andrew Ng has created more beginner-friendly lectures about LLM applications.</p>
+<ul>
+<li><strong><a href="https://www.deeplearning.ai/short-courses/">short courses</a></strong>: These short (~1 hour) videos look like a good introduction to various LLM concepts: vector DBs, inference, prompt engineering, validation, RLHF. The course on creating <a href="https://www.deeplearning.ai/short-courses/javascript-rag-web-apps-with-llamaindex/">RAG web apps</a> looks especially interesting.</li>
+<li><strong><a href="https://www.coursera.org/learn/generative-ai-with-llms">LLM MOOC</a></strong>: A week-end course that goes into a bit more depth than the short videos. Still very beginner-level.</li>
+</ul>
+</section>
+<section id="llms-explained-by-letitia" class="level3">
+<h3 class="anchored" data-anchor-id="llms-explained-by-letitia"><a href="https://www.youtube.com/playlist?list=PLpZBeKTZRGPOz2KK3J_Y3pH81NssReJ9j">LLMs explained by Letitia</a></h3>
+<p>This playlist is an intermediate introduction to LLMs. It covers a bunch of topics like Low-Rank Adaptation, state space models, and transformers.</p>
+<p>In general, the <a href="https://www.youtube.com/@AICoffeeBreak/featured">AI Coffee Break channel</a> is great for intermediate-level explainers on deep-learning topics, such as graph neural networks, diffusion models, CLIP embeddings, etc.</p>
+</section>
+</section>
+<section id="ai-safety" class="level2">
+<h2 class="anchored" data-anchor-id="ai-safety">AI Safety</h2>
+<section id="robert-miles-ai-safety" class="level3">
+<h3 class="anchored" data-anchor-id="robert-miles-ai-safety"><a href="https://www.youtube.com/@RobertMilesAI">Robert Miles AI Safety</a></h3>
+<p>Robert Miles’ channel is fantastic for beginners learning about AI safety. He does a great job of explaining the orthogonality thesis, instrumental convergence, mesa-optimizers, etc.</p>
+</section>
+</section>
+<section id="mechanistic-interpretability" class="level2">
+<h2 class="anchored" data-anchor-id="mechanistic-interpretability">Mechanistic Interpretability</h2>
+<section id="neel-nanda" class="level3">
+<h3 class="anchored" data-anchor-id="neel-nanda">Neel Nanda</h3>
+<p>Neel Nanda is a great person to follow in the mechinterp space. He consistenly has great content, from his interviews, <a href="https://www.neelnanda.io/mechanistic-interpretability">his mechinterp blog</a>, <a href="https://www.youtube.com/channel/UCBMJ0D-omcRay8dh4QT0doQ">YouTube channel</a>, and outrageously detailed <a href="https://dynalist.io/d/n2ZWtnoYHrU1s4vnFSAQ519J">mechinterp glossary</a>.</p>
+</section>
+<section id="distill.pub" class="level3">
+<h3 class="anchored" data-anchor-id="distill.pub"><a href="https://distill.pub/">Distill.pub</a></h3>
+<p>Distill is a journal that publishes articles on machine learning. It aims to be a more visual, intuitive, and interactive vision of academic publishing for ML. The articles are extremely high quality and are a great resource for learning about advanced topics in ML. The articles have an emphasis on interpretability of ML models, deliving into the “black box” of neural networks by examining the behavior of specific circuits within the network.</p>
+<p>Their <a href="https://transformer-circuits.pub/2021/framework/index.html">Transformer Circuits</a> article is one of the best I’ve found for deeply understanding how the residual streams work in transformers.</p>
+<p>One of the core Distill authors, Chris Olah, also <a href="http://colah.github.io/">has a personal blog</a> with some legendary articles.</p>
+</section>
+</section>
+</section>
+<section id="advanced-research" class="level1">
+<h1>Advanced Research</h1>
+<p>The best way to learn about advanced topics in ML is to read papers. I recommend the following resources for finding papers:</p>
+<ul>
+<li><a href="http://www.arxiv-sanity.com/">arXiv Sanity Preserver</a></li>
+<li>Twitter. I find Twitter to be much better than Reddit for keeping up with the latest research. You can see who I follow <a href="https://twitter.com/bae_theorem/following">here</a> (mostly computer vision researchers).</li>
+<li><a href="https://www.semanticscholar.org/">Semantic Scholar</a>. Great for finding related papers.</li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

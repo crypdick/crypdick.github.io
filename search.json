@@ -1,96 +1,5 @@
 [
   {
-    "objectID": "posts/2019-02-21-ai-social-good-podcast.html",
-    "href": "posts/2019-02-21-ai-social-good-podcast.html",
-    "title": "AI for Social Good Podcast Series",
-    "section": "",
-    "text": "The This Week in Machine Learning and AI Podcast just did a series of interviews with Microsoft researchers working on making the world a better place with AI.\nCheck it out at https://twimlai.com/ai4society/"
-  },
-  {
-    "objectID": "posts/2024-02-05-LLM-gathering.html",
-    "href": "posts/2024-02-05-LLM-gathering.html",
-    "title": "LLM Assistant for Better Gatherings",
-    "section": "",
-    "text": "I wanted to share my work from an LLM hackathon hosted by Deonna and Nick from AVL Digital Nomads. I recently have been reading “The Art of Gathering” by Priya Parker, which I recommend (see also: her TED talk and podcast). The goal was to create an assistant to help me brainstorm how to make events that are more meaningful and memorable.\nIn particular, I have an event template, I want to fill in each section of the template with the help of the LLM assistant. Here is the template:\nFrom experience, getting a language model to complete a complex, multi-part task like this one can be a mess. The LLM assistant can get off track, generate a bunch of nonsense, skip entire sections, make up unwanted sections, etc.\nTo help with this, I made a daisy chain of prompts. Each prompt focuses on filling one part of the event plan. Each chat session helps fill in a section of the event template. I then use this growing event plan as the input to the next prompt/chat session. The advantage of this approach is that I can guide the LLM at each step in the right direction, and edit the content manually before moving on.\nI ChatGPT pro access through work, but I didn’t want to use it for a personal project. So instead, I used ChatGPT-4 API calls (specifically gpt-4-turbo-preview) via my note-taking app, Obsidian. All of the prompts from this post are available in my LLM-gathering repository."
-  },
-  {
-    "objectID": "posts/2024-02-05-LLM-gathering.html#part-1-the-purpose",
-    "href": "posts/2024-02-05-LLM-gathering.html#part-1-the-purpose",
-    "title": "LLM Assistant for Better Gatherings",
-    "section": "Part 1: The purpose",
-    "text": "Part 1: The purpose\nThe book emphasizes the importance of a clear purpose for events to be meaningful. To help define the purpose, I’ll start by filling in the first section of the template:\n# The occasion\n\nA potluck dinner at my house.\nI then feed this into my first prompt (step1-purpose). Here is the raw output. The summary was too wordy, so I replied Please summarize the summary even further. Also, add something about promoting health in the purpose and I was mostly happy with that output. So, I edited it lightly and filled in the next section of the template:\n# Purpose of the event\n\n* To strengthen community bonds and foster new connections in a shared, communal experience.\n* To celebrate cultural diversity and promote understanding through a storytelling and cultural exchange centered around food.\n* To encourage healthy eating by inviting participants to bring dishes that are not only personally significant but also reflect healthy food choices, enhancing the gathering's focus on well-being and communal health."
-  },
-  {
-    "objectID": "posts/2019-09-03-installing-mosh-server-aws.html",
-    "href": "posts/2019-09-03-installing-mosh-server-aws.html",
-    "title": "Installing Mosh server on AWS",
-    "section": "",
-    "text": "Mosh (“mobile shell”) is an ssh alternative which is robust to network changes. It is super useful for working on a VPS when you are on a flaky connection or roaming. Here is how to install Mosh on an AWS EC2 instance.\nFirst, install and run mosh server:\nsudo add-apt-repository ppa:keithw/mosh\nsudo apt-get update && sudo apt-get upgrade\nsudo apt-get install mosh\nmosh-server  # start the server\nNext, we need to open up firewall rules. I tried running the following code from another guide, which did not work:\nsudo iptables -I INPUT 1 -p udp --dport 60000:61000 -j ACCEPT\nInstead, I had to go to the AWS EC2 console and to open the rules. On the left, go to “Security Groups”. Select the group. Inside the Inbound tab, click “Edit” then “Add Rule”. You want the following settings:\n\nType: “Custom UDP”\nPort Range: 60000 - 61000\nSource: leave alone (should automatically have “0.0.0.0/0; ::/0”)\n\nSave, and now you should be able to access your VPS with mosh. Good luck!"
-  },
-  {
-    "objectID": "posts/2019-06-03-installing-x2go-server.html",
-    "href": "posts/2019-06-03-installing-x2go-server.html",
-    "title": "Installing X2go server for i3",
-    "section": "",
-    "text": "I often like to work remote using a lightweight computer that is connected to a (remote) beefy server. I tried to follow this guide for creating a remote Linux workstation on a VPS.\nHere’s how I modified the guide and dealt with errors.\n\nX2Go Server configuration\nFirst, I installed i3 instead of xfce4:\napt install i3\nNext, I created an ~/.xinitrc:\n#!/bin/sh\nexec i3\nand made it executable with chmod +x ~/.xinitrc.\nNext, I copied over the default i3 config file:\ncp /etc/i3/config ~/.config/i3/config\nI made sure to start x2go on my server:\nservice x2goserver start\nI edited ~/.profile. I commented out the last line which said mesg n || true and replaced it with tty -s && mesg n. Activate it with source .bashrc.\n\n\nX2Go client configuration\nFor the session type, I selected “Custom desktop” and for the command I put /usr/bin/i3.\nFrustratingly, I still had issues with the ssh keys.\nI had some issues, though. I would be able to ssh into my host through the cli, but whenever I tried to connect via the x2go client it would prompt me for the password 3 times and throw an error,\nAccess denied. Authentication that can continue:\npublickey\nFinally, the solution was to delete the X2go session entry and retype the information from scratch."
-  },
-  {
-    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html",
-    "href": "posts/2024-08-26-in-defense-of-python-assertions.html",
-    "title": "In defense of Python assertions",
-    "section": "",
-    "text": "When new devs join my team, I inevitably hear that assertions are bad. This might be a spicy take, but I’m here to argue that assertions, when used correctly, can be great to use.\nI use Python’s assert statements a lot: for debugging, testing, and documenting assumptions. But before I make my case, let’s steelman the arguments against them."
-  },
-  {
-    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#they-can-be-sneakily-disabled",
-    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#they-can-be-sneakily-disabled",
-    "title": "In defense of Python assertions",
-    "section": "1. They can be sneakily disabled",
-    "text": "1. They can be sneakily disabled\nWhen you run Python in optimized mode (python -O), assertions are disabled. This is bad news if your code relies on them.\nNow, in 10 years of using Python, I’ve never seen anyone use -O. But, we shouldn’t assume that downstream users won’t."
-  },
-  {
-    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#assertionerrors-are-not-very-informative",
-    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#assertionerrors-are-not-very-informative",
-    "title": "In defense of Python assertions",
-    "section": "2. AssertionErrors are not very informative",
-    "text": "2. AssertionErrors are not very informative\nThis is true, which is why we should only use it in specific circumstances."
-  },
-  {
-    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#design-by-contract-dbc",
-    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#design-by-contract-dbc",
-    "title": "In defense of Python assertions",
-    "section": "Design by Contract (DbC)",
-    "text": "Design by Contract (DbC)\nDbC is about defining specs for your code using:\n\nPreconditions: conditions that must be true before a function is called.\nPostconditions: conditions that must be true after a function is called.\nInvariants conditions that must be true throughout the execution of a function.\n\nI use assertions to document these expectations. It’s like executable documentation. For example:\ndef fancy_processing(input_df: pd.DataFrame) -&gt; pd.DataFrame:\n    # Precondition\n    assert list(input_df.columns) == sorted(input_df.columns), f\"Columns should be sorted: {input_df.columns}\"\n\n    # ...processing...\n\n    # Postcondidtion\n    assert output_df.columns == input_df.columns, f\"Columns should not change: {output_df.columns} != {input_df.columns}\"\n    return output_df\nThat’s just an illustrative example, but you don’t want to go overboard with obvious checks. Assert important properties are holding true, not obvious things. As I see it, these assertions should always pass if I implemented my application correctly.\nFor more robust DbC in Python, check out:\n\nPydantic for dataclasses\nBeartype for strict typing\nPandera for validating DataFrames\n\nI am aware of the icontract, but I find that it makes code less readable than using @beartype and assertions."
-  },
-  {
-    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#debugging",
-    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#debugging",
-    "title": "In defense of Python assertions",
-    "section": "Debugging",
-    "text": "Debugging\nWhen I am in the thick of coding, assertions are my sanity checks. Unsure of my tensor shapes? Assert it. Unexpected dtypes? Assert it.\nOnce the code’s working, I’ll prune the less useful asserts. Liberal asserts are useful to constrain the search space of bugs, but you don’t need all of them once the code is more production-ready."
-  },
-  {
-    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#handling-production-errors",
-    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#handling-production-errors",
-    "title": "In defense of Python assertions",
-    "section": "Handling production errors",
-    "text": "Handling production errors\nAssertions should never be used to handle errors which are expected to happen in production. For example, never try: ... except AssertionError: .... Instead, use meaningful exceptions."
-  },
-  {
-    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#code-that-always-needs-to-run",
-    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#code-that-always-needs-to-run",
-    "title": "In defense of Python assertions",
-    "section": "Code that always needs to run",
-    "text": "Code that always needs to run\nNever use assertions if you have code that must run. For example, don’t use assertions for sanitizing user input."
-  },
-  {
-    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#gpu-tensors",
-    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#gpu-tensors",
-    "title": "In defense of Python assertions",
-    "section": "GPU Tensors",
-    "text": "GPU Tensors\nWhen dealing with GPU tensors, you should avoid anything that requires the CPU. Using things like print, .item(), and assert implicitly require a syncronization with the CPU."
-  },
-  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Richard Decal",
@@ -98,60 +7,11 @@
     "text": "In defense of Python assertions\n\n\n\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nAug 26, 2024\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Assistant for Better Gatherings\n\n\nUsing a daisy chain of prompts to plan a potluck\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nFeb 5, 2024\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nGetting Immersed VR setup on Ubuntu\n\n\nDocumenting how to get Immersed VR working on Ubuntu Linux\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nFeb 1, 2024\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nRichard’s ML Study Guide\n\n\nA collection of study materials for machine learning.\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nJan 17, 2024\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nHow to do stratified splitting of Multi-class Multi-labeled image classification data\n\n\nComplete with code and unit tests.\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nNov 22, 2020\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nAutomatically creating Kedro dataset directories\n\n\nAvoiding IO errors at the end of pipelines with a simple hook.\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nNov 8, 2020\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nInstalling Mosh server on AWS\n\n\nAlso works for other VPS\n\n\n\n\n\n\n\n\nSep 3, 2019\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nInstalling X2go server for i3\n\n\n\n\n\n\nnotes\n\n\nroadwarrior\n\n\n\n\n\n\n\n\n\nJun 3, 2019\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nAI for Social Good Podcast Series\n\n\n\n\n\n\nrecommendations\n\n\n\n\n\n\n\n\n\nFeb 21, 2019\n\n\nRichard Decal\n\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About Me",
+    "objectID": "posts/ai-social-good-podcast/2020-11-08-Automatically-generate-Kedro-dataset-directories.html",
+    "href": "posts/ai-social-good-podcast/2020-11-08-Automatically-generate-Kedro-dataset-directories.html",
+    "title": "Automatically creating Kedro dataset directories",
     "section": "",
-    "text": "I’m a series of spacetime events called Richard (or Ricardo in some circles). I use machine learning to scale ecosystem restoration using drones."
-  },
-  {
-    "objectID": "about.html#outdoors",
-    "href": "about.html#outdoors",
-    "title": "About Me",
-    "section": "Outdoors",
-    "text": "Outdoors\n\nI spend as much time as possible outdoors. I love hiking, camping, mountain biking, kayaking, and rock climbing."
-  },
-  {
-    "objectID": "about.html#travel",
-    "href": "about.html#travel",
-    "title": "About Me",
-    "section": "Travel",
-    "text": "Travel\n\nI have visited 28+ countries, done 3 major bicycle tours (Seattle ↣ San Francisco, around Taiwan, and around New Zealand), and been to 47 of 50 U.S. states.\nI’ve hitchhiked over 10,000 miles in the US, Taiwan, Thailand, Australia, and New Zealand.\nI converted a jumbo news crew van into a tiny home and lived the van life for 2 years. It had roof solar, a fridge/freezer, and fit everything I owned!"
-  },
-  {
-    "objectID": "about.html#talks-and-interviews",
-    "href": "about.html#talks-and-interviews",
-    "title": "About Me",
-    "section": "Talks and Interviews",
-    "text": "Talks and Interviews\n\nTalk on Data Curation at the AI in Production Conference ’24.\nRay Summit ’21: “How Ray and Anyscale Make it Easy to do Massive-scale ML on Aerial Imagery”\nTalk for TA3M Seattle: “How AI can be abused by surveillance states” (presentation slides)\nInterview with KOMO news in Seattle over the net neutrality debate\nFor my academic/industry talks, please refer to my work page."
-  },
-  {
-    "objectID": "about.html#volunteering",
-    "href": "about.html#volunteering",
-    "title": "About Me",
-    "section": "Volunteering",
-    "text": "Volunteering\n\nI helped organize a Surveillance Self-Defense Workshop for Activists with TA3M Seattle.\nI organized and led a protest against Congress’s plans to end the Internet’s decentralized nature (downtown Seattle, December 2014).\nI volunteered for 1.5 months for a community in Mota Lava, Vanuatu. We brought an oil press to make virgin coconut oil.\nI volunteered for a whale monitoring survey to study how the world’s largest LPG processing center would affect the world’s largest Humpback whale calving area near James Price Point, Australia."
-  },
-  {
-    "objectID": "about.html#art",
-    "href": "about.html#art",
-    "title": "About Me",
-    "section": "Art",
-    "text": "Art\n\nI was Artist in Residence at the Sir James Wallace Arts Trust for a few months in 2015. A selection of my works are in circulation around public spaces in New Zealand. Links to my Flickr below!\nI find the intersection of art and machine learning fascinating. I maintain a repository of research projects and use AI art generators."
-  },
-  {
-    "objectID": "about.html#it",
-    "href": "about.html#it",
-    "title": "About Me",
-    "section": "IT",
-    "text": "IT\n\nSelf-hosted services - My server runs Nextcloud, Plex, a Tor relay, an email server, a ZFS NAS, and more.\nDIY Smart Home - I made various smart-home devices: a smart mirror, automated hydroponics for my garden, a mobile filesharing mesh network, a digitial assistant, and more.\nRemote development - I am persuing the ultimate mobile ergonomic workstation. My current setup is a NReal air headset, a 5G hotspot, and a remote tunnel over Android."
-  },
-  {
-    "objectID": "work.html",
-    "href": "work.html",
-    "title": "My Work",
-    "section": "",
-    "text": "My mission is to leverage my talents and interests to positively impact in the world. I see machine learning as a tool to maximize my impact.\nAt am currently Lead ML Scientist at Dendra Systems, where I work on scaling up ecosystem monitoring and restoration using smart drones.\nFor a 1-page summary of my career, please refer to my resume:\n\n\nDownload ML Resume (pdf)\n\n\nFor a comprehensive summary, please refer to my CV:\n\n\nDownload ML CV (pdf)\n\n\nIn a past life, I was a molecular biologist. Over the years I researched colon cancer, Parkinson’s disease, olfaction, and organic chemistry.\n\n\nProjects\n\nTackling Climate Change Using Automated Afforestation\nDendra Systems - Feb. 2020 → Now\nI am currently the Lead ML engineer at a start-up fighting climate change and deforestation using tree-planting drones. Please refer to CV for detail.\n\n\nImproving Remote Monitoring of Cardiac Patients by Automatically Detecting Arrythmias\nPacemate - Feb. 2019 → Dec. 2019\nI worked as the lead data scientist at an implantable heart device analytics company. I implemented a pipeline to process incoming ECG transmissions from remote devices and classify arrythmias using a deep convolutional neural network. To train this network, I mined years of ground truth data labeled by board-certified electrophysiologists.\n\n\nReinforcement Learning for Tracing Neuron Morphologies\nHanchuan Peng lab. Allen Institute for Brain Science, Seattle, WA, USA - Summer 2018\nI made a proof of concept showing that deep reinforcement learning can be used to automatically trace neuron morphologies.\n\n\nMosquito thermal plume tracking\nAdrienne Fairhall lab. University of Washington, Dept. of Physiology and Biophysics, Seattle, WA, USA - 2014 → 2016\nI worked as a research assistant in Fairhall Lab. We’re interested in answering how the history of sensory experience affects decision-making. As a model, we use mosquitoes host-seeking behavior, as carbon dioxide and thermal signals are known to inform their search. These thermal and olfactory cues have a complicated and sparse structure due to turbulence. How do mosquitoes use spatially- and temporally-sparse information to navigate to hosts? With the Daniel, Riffell and Dickinson labs, we study the behavioral and neurophysiological responses of mosquitoes to temporal patterns in heat and CO2 plumes, which we then use to develop models for multisensory integration.\nMy current role in the project is creating models of mosquitoes tracking turbulent thermal plumes and benchmark those models against wind-tunnel behavioral data. In particular, I am creating driven, damped agent-based dynamical models which reproduce mosquito baseline flight and then test various strategies for plume navigation. These models will be further validated using electrophysiological and tethered flight data to test theories about multi-modal decision-making.\n\n\nHumpback Whale Census\nKimberley Community Whale Research Project, Murdudun, Australia - 2012\nA community-initiated peer-review at the proposed site of the world’s second-largest liquefied gas processing port. Our peer-review’s estimates of humpback migration and breeding activity near James Price Point revealed gross discrepancies in the original oil conglomerate’s survey.\n\n\nMitochondrial dysfunction in Parkinson’s Disease\nLeo Pallanck lab. University of Washington, Dept. of Genome Sciences, Seattle, WA, USA - 2010\nI helped establish a method to grow, stain, and image primary dopaminergic neural culture from Drosophila embryos in order to test whether Parkin and PINK1, proteins involved in Parkinson’s disease, are recruited to depolarized mitochondria in dopaminergic neurons. This research was published in PNAS. I presented a poster at SACNAS 2010.\n\n\nProbing Function of Colon Cancer Proteins\nBrooke M. McCartney lab. Carnegie Mellon University , Dept. of Biological Sciences, Pittsburg, PA, USA - 2009\nI determined that APC2, a protein with probable roles in colon cancer tumorogenesis, did not interact with β-catenin of the Wnt pathway’s destruction complex. I determined that APC2’s conserved N-terminal domain was not essential for its proper localization. This research was published in Genetics. I presented a poster at ABRCMS 2009 and Sigma Xi 2009.\n\n\nQuantifying endogenous sRNA concentrations in C. elegans\nKatherine Walstrom lab. New College of Florida, Dept. of Natural Sciences, Sarasota, FL, USA - 2010 → 2011\nMy thesis proposes a model for RNA Helicase A function in endogenous C. elegans RNAi pathways.\n\n\nSearching for P450 Active site mimics\nPaul Scudder lab. New College of Florida, Dept. of Natural Sciences, Sarasota, FL, USA - 2008 → 2009\nI partially synthesized precursors to a novel high-valent iron-stabilizing macrocycle based on the active site of cytochrome P450."
+    "text": "If you use Kedro for data pipelines, you may have had issues saving datasets if the dataset directory does not already exist. Instead of manually creating these data folders, here is a hook which automatically creates any missing directories. In the process, it’ll also automatically generate a .gitkeep file.\nimport logging\nimport os\nfrom pathlib import Path\n\nfrom kedro.framework.hooks import hook_impl\n\nlogger = logging.getLogger(__name__)\n\n\nclass CreateDatasetFoldersHook:\n    \"\"\"\n    For each dataset in the Kedro catalog, recursively create parent directories.\n\n    This prevents the sad situation where at the end of a pipeline run, the job fails with an IO error.\n\n    See https://discourse.kedro.community/t/how-do-i-access-each-dataset-s-dataset-fpath-attribute/164\n    \"\"\"\n\n    @staticmethod\n    @hook_impl\n    def after_catalog_created(catalog, conf_catalog, conf_creds, feed_dict, save_version, load_versions, run_id):\n        entries = catalog.list()\n        for entry in entries:\n            try:\n                dset = getattr(catalog.datasets, entry)\n\n                if hasattr(dset, \"_path\"):\n                    _make_dirs(dset._path)\n                elif hasattr(dset, \"_filepath\"):\n                    _make_dirs(dset._filepath)\n                # some dataset types do not have either of these attributes.\n                else:\n                    pass\n            # catalog.list() includes params. These will cause trouble if you try to load\n            # from the catalog.datasets\n            except AttributeError:\n                pass\n\n\ndef _make_dirs(path_to_make):\n    if not os.path.exists(path_to_make):\n        logger.info(f\"Creating missing path {path_to_make}\")\n        os.makedirs(path_to_make)\n    # creates a .gitkeep file while we're at it\n    Path(os.path.join(path_to_make, \".gitkeep\")).touch()\nCredit to DataEngineerOne, who guided me in the right direction on the kedro.community forum."
   },
   {
     "objectID": "posts/2024-01-17-Richards-ML-Study-Guide.html",
@@ -231,11 +91,18 @@
     "text": "Mechanistic Interpretability\n\nNeel Nanda\nNeel Nanda is a great person to follow in the mechinterp space. He consistenly has great content, from his interviews, his mechinterp blog, YouTube channel, and outrageously detailed mechinterp glossary.\n\n\nDistill.pub\nDistill is a journal that publishes articles on machine learning. It aims to be a more visual, intuitive, and interactive vision of academic publishing for ML. The articles are extremely high quality and are a great resource for learning about advanced topics in ML. The articles have an emphasis on interpretability of ML models, deliving into the “black box” of neural networks by examining the behavior of specific circuits within the network.\nTheir Transformer Circuits article is one of the best I’ve found for deeply understanding how the residual streams work in transformers.\nOne of the core Distill authors, Chris Olah, also has a personal blog with some legendary articles."
   },
   {
-    "objectID": "posts/ai-social-good-podcast/2020-11-08-Automatically-generate-Kedro-dataset-directories.html",
-    "href": "posts/ai-social-good-podcast/2020-11-08-Automatically-generate-Kedro-dataset-directories.html",
-    "title": "Automatically creating Kedro dataset directories",
+    "objectID": "posts/2019-02-21-ai-social-good-podcast.html",
+    "href": "posts/2019-02-21-ai-social-good-podcast.html",
+    "title": "AI for Social Good Podcast Series",
     "section": "",
-    "text": "If you use Kedro for data pipelines, you may have had issues saving datasets if the dataset directory does not already exist. Instead of manually creating these data folders, here is a hook which automatically creates any missing directories. In the process, it’ll also automatically generate a .gitkeep file.\nimport logging\nimport os\nfrom pathlib import Path\n\nfrom kedro.framework.hooks import hook_impl\n\nlogger = logging.getLogger(__name__)\n\n\nclass CreateDatasetFoldersHook:\n    \"\"\"\n    For each dataset in the Kedro catalog, recursively create parent directories.\n\n    This prevents the sad situation where at the end of a pipeline run, the job fails with an IO error.\n\n    See https://discourse.kedro.community/t/how-do-i-access-each-dataset-s-dataset-fpath-attribute/164\n    \"\"\"\n\n    @staticmethod\n    @hook_impl\n    def after_catalog_created(catalog, conf_catalog, conf_creds, feed_dict, save_version, load_versions, run_id):\n        entries = catalog.list()\n        for entry in entries:\n            try:\n                dset = getattr(catalog.datasets, entry)\n\n                if hasattr(dset, \"_path\"):\n                    _make_dirs(dset._path)\n                elif hasattr(dset, \"_filepath\"):\n                    _make_dirs(dset._filepath)\n                # some dataset types do not have either of these attributes.\n                else:\n                    pass\n            # catalog.list() includes params. These will cause trouble if you try to load\n            # from the catalog.datasets\n            except AttributeError:\n                pass\n\n\ndef _make_dirs(path_to_make):\n    if not os.path.exists(path_to_make):\n        logger.info(f\"Creating missing path {path_to_make}\")\n        os.makedirs(path_to_make)\n    # creates a .gitkeep file while we're at it\n    Path(os.path.join(path_to_make, \".gitkeep\")).touch()\nCredit to DataEngineerOne, who guided me in the right direction on the kedro.community forum."
+    "text": "The This Week in Machine Learning and AI Podcast just did a series of interviews with Microsoft researchers working on making the world a better place with AI.\nCheck it out at https://twimlai.com/ai4society/"
+  },
+  {
+    "objectID": "posts/2019-09-03-installing-mosh-server-aws.html",
+    "href": "posts/2019-09-03-installing-mosh-server-aws.html",
+    "title": "Installing Mosh server on AWS",
+    "section": "",
+    "text": "Mosh (“mobile shell”) is an ssh alternative which is robust to network changes. It is super useful for working on a VPS when you are on a flaky connection or roaming. Here is how to install Mosh on an AWS EC2 instance.\nFirst, install and run mosh server:\nsudo add-apt-repository ppa:keithw/mosh\nsudo apt-get update && sudo apt-get upgrade\nsudo apt-get install mosh\nmosh-server  # start the server\nNext, we need to open up firewall rules. I tried running the following code from another guide, which did not work:\nsudo iptables -I INPUT 1 -p udp --dport 60000:61000 -j ACCEPT\nInstead, I had to go to the AWS EC2 console and to open the rules. On the left, go to “Security Groups”. Select the group. Inside the Inbound tab, click “Edit” then “Add Rule”. You want the following settings:\n\nType: “Custom UDP”\nPort Range: 60000 - 61000\nSource: leave alone (should automatically have “0.0.0.0/0; ::/0”)\n\nSave, and now you should be able to access your VPS with mosh. Good luck!"
   },
   {
     "objectID": "posts/2024-02-01-immersed-vr-ubuntu.html",
@@ -245,10 +112,143 @@
     "text": "In my quest to perfect my “road warrior” setup, I have been experimenting with coding in VR. I have been using the Immersed VR app on my Quest 3 headset to create a virtual workspace. Unfortunately, the official Immersed documentation is not very clear on how to get Immersed VR setup on Ubuntu. Here are the steps I took to get it working. I would like to credit this blog post by Alexandre Souza for pointing me in the right direction, my contribution is porting the steps to Ubuntu Linux.\nSteps: * Follow the instructions on the Immersed VR website to install the Immersed VR app on your headset and on Linux (download page here). * Install the required dependencies:\nsudo apt install v4l2loopback-dkms v4l2loopback-utils\n\nCreate a file to start the v4l2loopback service at boot:\n\nsudo vim /etc/systemd/system/v4l2loopback.service\nHere are the settings I used for the service file, based on the aforementioned blog post. The device is set to /dev/video9 to avoid conflicts with other devices.\n[Unit]\nDescription=v4l2loopback\n\n[Service]\nExecStart=/bin/modprobe v4l2loopback video_nr=9 card_label=\"ImmersedVR\" exclusive_caps=1\nExecStop=/bin/rmmod v4l2loopback\nType=simple\nRemainAfterExit=yes\n\n[Install]\nWantedBy=default.target\n\nEnable the service:\n\nsudo systemctl enable v4l2loopback\n\nStart the service:\n\nsudo systemctl start v4l2loopback\n\nUpdate the ~/.ImmersedConf file to use the new device:\n\n# before:\n# \"CameraDevice\": \"/dev/video0\"\n# after:\n\"CameraDevice\": \"/dev/video9\"\n\nRun the ImmersedVR AppImage:\n\nchmod +x Immersed-x86_64.AppImage\n./Immersed-x86_64.AppImage\nOn my machine, the app will display a “Virtual camera device is not found at /dev/video0” error, even though we set the config file to use /dev/video9. I just click “OK” and the app correctly uses the /dev/video9 device.\nAnother tip is that you can create virtual monitors, even if you don’t have a physical monitor connected. This is natively supported by the Immersed app on Windows/Mac, but for Linux you need to use a tool like xrandr to create a virtual monitor. This blog post by Craig Wardman explains how to do it."
   },
   {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About Me",
+    "section": "",
+    "text": "I’m a series of spacetime events called Richard (or Ricardo in some circles). I use machine learning to scale ecosystem restoration using drones."
+  },
+  {
+    "objectID": "about.html#outdoors",
+    "href": "about.html#outdoors",
+    "title": "About Me",
+    "section": "Outdoors",
+    "text": "Outdoors\n\nI spend as much time as possible outdoors. I love hiking, camping, mountain biking, kayaking, and rock climbing."
+  },
+  {
+    "objectID": "about.html#travel",
+    "href": "about.html#travel",
+    "title": "About Me",
+    "section": "Travel",
+    "text": "Travel\n\nI have visited 28+ countries, done 3 major bicycle tours (Seattle ↣ San Francisco, around Taiwan, and around New Zealand), and been to 47 of 50 U.S. states.\nI’ve hitchhiked over 10,000 miles in the US, Taiwan, Thailand, Australia, and New Zealand.\nI converted a jumbo news crew van into a tiny home and lived the van life for 2 years. It had roof solar, a fridge/freezer, and fit everything I owned!"
+  },
+  {
+    "objectID": "about.html#talks-and-interviews",
+    "href": "about.html#talks-and-interviews",
+    "title": "About Me",
+    "section": "Talks and Interviews",
+    "text": "Talks and Interviews\n\nTalk on Data Curation at the AI in Production Conference ’24.\nRay Summit ’21: “How Ray and Anyscale Make it Easy to do Massive-scale ML on Aerial Imagery”\nTalk for TA3M Seattle: “How AI can be abused by surveillance states” (presentation slides)\nInterview with KOMO news in Seattle over the net neutrality debate\nFor my academic/industry talks, please refer to my work page."
+  },
+  {
+    "objectID": "about.html#volunteering",
+    "href": "about.html#volunteering",
+    "title": "About Me",
+    "section": "Volunteering",
+    "text": "Volunteering\n\nI helped organize a Surveillance Self-Defense Workshop for Activists with TA3M Seattle.\nI organized and led a protest against Congress’s plans to end the Internet’s decentralized nature (downtown Seattle, December 2014).\nI volunteered for 1.5 months for a community in Mota Lava, Vanuatu. We brought an oil press to make virgin coconut oil.\nI volunteered for a whale monitoring survey to study how the world’s largest LPG processing center would affect the world’s largest Humpback whale calving area near James Price Point, Australia."
+  },
+  {
+    "objectID": "about.html#art",
+    "href": "about.html#art",
+    "title": "About Me",
+    "section": "Art",
+    "text": "Art\n\nI was Artist in Residence at the Sir James Wallace Arts Trust for a few months in 2015. A selection of my works are in circulation around public spaces in New Zealand. Links to my Flickr below!\nI find the intersection of art and machine learning fascinating. I maintain a repository of research projects and use AI art generators."
+  },
+  {
+    "objectID": "about.html#it",
+    "href": "about.html#it",
+    "title": "About Me",
+    "section": "IT",
+    "text": "IT\n\nSelf-hosted services - My server runs Nextcloud, Plex, a Tor relay, an email server, a ZFS NAS, and more.\nDIY Smart Home - I made various smart-home devices: a smart mirror, automated hydroponics for my garden, a mobile filesharing mesh network, a digitial assistant, and more.\nRemote development - I am persuing the ultimate mobile ergonomic workstation. My current setup is a NReal air headset, a 5G hotspot, and a remote tunnel over Android."
+  },
+  {
     "objectID": "posts/2020-11-22-Howto-stratified-splitting-Multiclass-Multilabeled-image-classification-dataset.html",
     "href": "posts/2020-11-22-Howto-stratified-splitting-Multiclass-Multilabeled-image-classification-dataset.html",
     "title": "How to do stratified splitting of Multi-class Multi-labeled image classification data",
     "section": "",
     "text": "Stratified sampling is imporant when you have extremely unbalanced machine learning datasets to ensure that each class is evenly distributed across your train/test/validation splits. While there are several solutions for multi-class data, there are few for multi-classs and multi-label datasets. So, I’m sharing my solution below.\nHere’s a handy visual for stratified sampling from Wikipedia: \nThe solution depends on skmultilearn’s IterativeStratification method. Unfortunately, skmultilearn is not very well maintained and I ran into a few sharp corners while coming up with this solution. I documented those sharp corners in the comments below.\nAlso note that these function is used inside a Kedro pipeline, where I am using Kedro’s PartitionDatasets. That’s why the return values are sometimes packaged inside a dictionary.\nI am also making available my pytest suites at the end.\nimport pandas as pd\nimport numpy as np\nfrom typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union\n\nimport ipytest\nimport pytest\nfrom typeguard import typechecked\nfrom skmultilearn.model_selection.iterative_stratification import IterativeStratification\n\n# enables ipytest notebook magic\nipytest.autoconfig()\n\nlogger = logging.getLogger(__name__)\n@typechecked\ndef stratify_shuffle_split_subsets(\n    full_dataset: Dict[str, Callable], output_partition_name: str, train_fraction: float\n) -&gt; Tuple[pd.DataFrame, Dict[str, pd.DataFrame], Dict[str, pd.DataFrame]]:\n    \"\"\"\n    Stratify-shuffle-split the a multi-class multi-label dataset into\n    train/dev/validation sets.\n\n    Args:\n        full_dataset: the full supervised dataset. One column is the img uris, and the rest are binary labels.\n        output_partition_name: the name of the output partition\n        train_fraction: the fraction of data to reserve for the training dataset. The remaining data will be evenly\n            split into the dev and validation subsets.\n\n    Returns:\n        the supervised dataset, split into train/test/dev subsets. The train subset is not saved as a partitionedDataset\n        yet because we are doing label smoothing in the next processing step.\n    \"\"\"\n    if not 0 &lt; train_fraction &lt; 1:\n        raise ValueError(f\"Training fraction must be value between 0 and 1, got {train_fraction}\")\n\n    loader = full_dataset[output_partition_name]\n    full_dataset = loader()\n    original_cols = full_dataset.columns\n    # pandas documentation says to use .to_numpy() instead of .values for consistency\n    img_urls = full_dataset[\"img_url\"].to_numpy()\n\n    # sanity check: no duplicate labels\n    if not len(img_urls) == len(set(img_urls)):\n        raise ValueError(\"Duplicate image keys detected.\")\n\n    labels = full_dataset.drop(columns=[\"img_url\"]).to_numpy().astype(int)\n    # NOTE generators are replicated across workers. do stratified shuffle split beforehand\n    logger.info(\"stratifying dataset iteratively. this may take a while.\")\n    # NOTE: splits &gt;2 broken; https://github.com/scikit-multilearn/scikit-multilearn/issues/209\n    # so, do 2 rounds of iterative splitting\n    stratifier = IterativeStratification(\n        n_splits=2, order=2, sample_distribution_per_fold=[1.0 - train_fraction, train_fraction],\n    )\n    # this class is a generator that produces k-folds. we just want to iterate it once to make a single static split\n    # NOTE: needs to be computed on hard labels.\n    train_indexes, everything_else_indexes = next(stratifier.split(X=img_urls, y=labels))\n\n    num_overlapping_samples = len(set(train_indexes).intersection(set(everything_else_indexes)))\n    if num_overlapping_samples != 0:\n        raise ValueError(f\"First splitting failed, {num_overlapping_samples} overlapping samples detected\")\n\n    # s3url array shape (N_samp,)\n    x_train, x_else = img_urls[train_indexes], img_urls[everything_else_indexes]\n    # labels array shape (N_samp, n_classes)\n    Y_train, Y_else = labels[train_indexes, :], labels[everything_else_indexes, :]\n\n    # now, split the \"else\" data evenly into dev/val splits\n    stratifier = IterativeStratification(n_splits=2, order=2)  # splits evenly by default\n    dev_indexes, validation_indexes = next(stratifier.split(x_else, Y_else))\n\n    num_overlapping_samples = len(set(dev_indexes).intersection(set(validation_indexes)))\n    if num_overlapping_samples != 0:\n        raise ValueError(f\"Second splitting failed, {num_overlapping_samples} overlapping samples detected\")\n\n    x_dev, x_val = (x_else[dev_indexes], x_else[validation_indexes])\n    Y_dev, Y_val = (Y_else[dev_indexes, :], Y_else[validation_indexes, :])\n\n    for subset_name, frac, encodings_collection in [\n        (\"train\", train_fraction, Y_train),\n        (\"dev\", (1.0 - train_fraction) / 2, Y_dev),\n        (\"val\", (1.0 - train_fraction) / 2, Y_val),\n    ]:\n        # column-wise sum. sum(counts) &gt; n_samples due to imgs with &gt;1 class\n        count_values = np.sum(encodings_collection, axis=0)\n        # skip first col, which is the image key, not a class ID\n        counts = {class_id: count_val for class_id, count_val in zip(full_dataset.columns[1:], count_values)}\n        logger.info(f\" {subset_name} subset ({frac * 100:.1f}%) encodings counts after stratification: {counts}\")\n\n    # combine (x,y) data into dataframes\n    train_subset = pd.DataFrame(Y_train)\n    train_subset.insert(0, \"img_url\", pd.Series(x_train))\n    train_subset.columns = original_cols\n\n    dev_subset = pd.DataFrame(Y_dev)\n    dev_subset.insert(0, \"img_url\", pd.Series(x_dev))\n    dev_subset.columns = original_cols\n\n    val_subset = pd.DataFrame(Y_val)\n    val_subset.insert(0, \"img_url\", pd.Series(x_val))\n    val_subset.columns = original_cols\n\n    # TODO create Great Expectations suite for this node instead\n    assert \"img_url\" in dev_subset.columns\n    assert \"img_url\" in val_subset.columns\n    assert \"img_url\" in train_subset.columns\n\n    return (\n        train_subset,\n        {output_partition_name: dev_subset},\n        {output_partition_name: val_subset},\n    )\n\nTesting that it all works\nBelow are my pytests and their results. Note, that the fixtures mimic Kedro PartitionDatasets.\n@pytest.fixture\ndef unsplit_supervised_learning_dataset_partition_name():\n    \"\"\"PartitionName to simulate Kedro PartitionDataset\"\"\"\n    return \"pytest_unsplit_supervised_learning_dataset_partition_name\"\n\n\n@pytest.fixture\ndef unsplit_supervised_learning_dataset(unsplit_supervised_learning_dataset_partition_name: str) -&gt; Dict[str, Callable]:\n    \"\"\"\n    Generates a multi-class multilabel dataset.\n\n    Args:\n        unsplit_supervised_learning_dataset_partition_name:\n\n    Returns:\n        a multi-class multi-label df, packed in a lambda to mimic Kedro PartitionDataset\n    \"\"\"\n    df_rows = []\n\n    n_total = 60\n    n_created = 0\n    n_class1 = n_total // 3\n    n_class2 = n_total // 3\n    n_class2_plus_3 = n_total // 3\n\n    for _ in range(n_class1):\n        df_rows.append({\"img_url\": f\"s3://test{n_created}\", \"class0\": 1, \"class1\": 0, \"class2\": 0})\n        n_created += 1\n\n    for _ in range(n_class2):\n        df_rows.append({\"img_url\": f\"s3://test{n_created}\", \"class0\": 0, \"class1\": 1, \"class2\": 0})\n        n_created += 1\n\n    for _ in range(n_class2_plus_3):\n        df_rows.append({\"img_url\": f\"s3://test{n_created}\", \"class0\": 0, \"class1\": 1, \"class2\": 1})\n        n_created += 1\n\n    df = pd.DataFrame(df_rows)\n    data_loader = lambda: df\n\n    return {unsplit_supervised_learning_dataset_partition_name: data_loader}\n\n\n@pytest.mark.parametrize(\"train_fraction\", [-1.0, 0, 1, 5])\ndef test_train_fraction_range(\n    unsplit_supervised_learning_dataset, train_fraction, unsplit_supervised_learning_dataset_partition_name\n):\n    \"\"\"\n    Tests that train_fraction is validated between 0, 1.\n    \"\"\"\n    with pytest.raises(ValueError):\n        stratify_shuffle_split_subsets(\n            full_dataset=unsplit_supervised_learning_dataset,\n            output_partition_name=unsplit_supervised_learning_dataset_partition_name,\n            train_fraction=train_fraction,\n        )\n\n\ndef test_duplicate_uris_detected(unsplit_supervised_learning_dataset_partition_name):\n    \"\"\"Tests whether duplicate image keys are properly detected\"\"\"\n    # setup\n\n    df = pd.DataFrame(\n        [\n            {\"img_url\": \"s3://duplicate1\", \"class0\": 1, \"class1\": 0, \"class2\": 0},\n            {\"img_url\": \"s3://duplicate1\", \"class0\": 1, \"class1\": 0, \"class2\": 0},\n            {\"img_url\": \"s3://duplicate1\", \"class0\": 1, \"class1\": 0, \"class2\": 0},\n            {\"img_url\": \"s3://duplicate2\", \"class0\": 0, \"class1\": 1, \"class2\": 0},\n            {\"img_url\": \"s3://duplicate2\", \"class0\": 0, \"class1\": 1, \"class2\": 0},\n        ]\n    )\n    data_loader = lambda: df\n    partition_dset = {unsplit_supervised_learning_dataset_partition_name: data_loader}\n\n    # test\n    with pytest.raises(ValueError):\n        stratify_shuffle_split_subsets(\n            full_dataset=partition_dset,\n            output_partition_name=unsplit_supervised_learning_dataset_partition_name,\n            train_fraction=0.6,\n        )\n\n        \ndef test_col_names_same(unsplit_supervised_learning_dataset, unsplit_supervised_learning_dataset_partition_name):\n    \"\"\"\n    Tests that train_fraction is validated between 0, 1.\n    \"\"\"\n    # setup\n    train_split: pd.DataFrame\n    dev_split: Dict[str, pd.DataFrame]\n    val_split: Dict[str, pd.DataFrame]\n    # set train fraction to 0.6 to make math easier later\n    train_fraction = 0.6\n    data_loader = unsplit_supervised_learning_dataset[unsplit_supervised_learning_dataset_partition_name]\n    original_df = data_loader()\n    original_df_cols = original_df.columns\n\n    # run\n    train_df, dev_split, val_split = stratify_shuffle_split_subsets(\n        full_dataset=unsplit_supervised_learning_dataset,\n        output_partition_name=unsplit_supervised_learning_dataset_partition_name,\n        train_fraction=train_fraction,\n    )\n\n    # test setup\n    dev_df, val_df = (\n        dev_split[unsplit_supervised_learning_dataset_partition_name],\n        val_split[unsplit_supervised_learning_dataset_partition_name],\n    )\n    train_df_cols, dev_df_cols, val_df_cols = train_df.columns, dev_df.columns, val_df.columns\n\n    # tests\n    assert all(train_df_cols == original_df_cols)\n    assert all(dev_df_cols == original_df_cols)\n    assert all(val_df_cols == original_df_cols)\n\n    \ndef test_stratify_shuffle_split_subsets(\n    unsplit_supervised_learning_dataset, unsplit_supervised_learning_dataset_partition_name\n):\n    \"\"\"Tests whether a multi-class multi-label dataset gets properly stratify-shuffle-split.\"\"\"\n    # setup\n    train_split: pd.DataFrame\n    dev_split: Dict[str, pd.DataFrame]\n    val_split: Dict[str, pd.DataFrame]\n    # set train fraction to 0.6 to make math easier later\n    train_fraction = 0.6\n    ratio_train_to_val = train_fraction / ((1.0 - train_fraction) / 2)\n    data_loader = unsplit_supervised_learning_dataset[unsplit_supervised_learning_dataset_partition_name]\n    original_dset_len = len(data_loader())\n\n    # run\n    train_df, dev_split, val_split = stratify_shuffle_split_subsets(\n        full_dataset=unsplit_supervised_learning_dataset,\n        output_partition_name=unsplit_supervised_learning_dataset_partition_name,\n        train_fraction=train_fraction,\n    )\n\n    # test setup\n    dev_df, val_df = (\n        dev_split[unsplit_supervised_learning_dataset_partition_name],\n        val_split[unsplit_supervised_learning_dataset_partition_name],\n    )\n    train_keys, dev_keys, val_keys = train_df[\"img_url\"], dev_df[\"img_url\"], val_df[\"img_url\"]\n\n    uniq_train_keys, uniq_dev_keys, uniq_val_keys = set(train_keys), set(dev_keys), set(val_keys)\n\n    # Tests\n\n    ## test keys\n\n    # test no duplicate keys within subsets\n    assert len(train_keys) == len(uniq_train_keys)\n    assert len(val_keys) == len(uniq_val_keys)\n    assert len(dev_keys) == len(uniq_dev_keys)\n\n    # test that all subsets have mutually exclusive S3 URIs\n    assert len(uniq_train_keys.intersection(uniq_dev_keys)) == 0\n    assert len(uniq_train_keys.intersection(uniq_val_keys)) == 0\n    assert len(uniq_val_keys.intersection(uniq_dev_keys)) == 0\n\n    ## test ratios\n    # test that dev and val subsets get same number of samples\n    assert len(dev_df) == len(val_df)\n    # test that test set is 2x size of dev\n    assert len(train_df) / (len(train_df) + len(dev_df) + len(val_df)) == pytest.approx(train_fraction)\n    # test that all samples are used\n    assert len(train_df) + len(dev_df) + len(val_df) == original_dset_len\n\n    ## test distributions\n\n    ### class 0\n    # test whether dev/val set got same amount of class 0\n    assert len(dev_df[dev_df.class0 == 1]) == len(val_df[val_df.class0 == 1])\n    # test whether train set got 2x class0 as val set\n    assert len(train_df[train_df.class0 == 1]) / len(val_df[val_df.class0 == 1]) == pytest.approx(ratio_train_to_val)\n\n    ### class 1\n    # test whether dev/val set got same amount of class 1\n    assert len(dev_df[dev_df.class1 == 1]) == len(val_df[val_df.class1 == 1])\n    # test whether train set got 2x class1 as val set\n    assert len(train_df[train_df.class1 == 1]) / len(val_df[val_df.class1 == 1]) == pytest.approx(ratio_train_to_val)\n\n    ### class 2\n    # test whether dev/val set got same amount of class 2\n    assert len(dev_df[dev_df.class2 == 1]) == len(val_df[val_df.class2 == 1])\n    # test whether train set got 2x class1 as val set\n    assert len(train_df[train_df.class2 == 1]) / len(val_df[val_df.class2 == 1]) == pytest.approx(ratio_train_to_val)\nipytest.run()\n.....2020-11-22 17:19:46,228 - __main__ - INFO - stratifying dataset iteratively. this may take a while.\n2020-11-22 17:19:46,239 - __main__ - INFO -  train subset (60.0%) encodings counts after stratification: {'class0': 12, 'class1': 24, 'class2': 12}\n2020-11-22 17:19:46,251 - __main__ - INFO -  dev subset (20.0%) encodings counts after stratification: {'class0': 4, 'class1': 8, 'class2': 4}\n2020-11-22 17:19:46,253 - __main__ - INFO -  val subset (20.0%) encodings counts after stratification: {'class0': 4, 'class1': 8, 'class2': 4}\n.2020-11-22 17:19:46,271 - __main__ - INFO - stratifying dataset iteratively. this may take a while.\n2020-11-22 17:19:46,280 - __main__ - INFO -  train subset (60.0%) encodings counts after stratification: {'class0': 12, 'class1': 24, 'class2': 12}\n2020-11-22 17:19:46,283 - __main__ - INFO -  dev subset (20.0%) encodings counts after stratification: {'class0': 4, 'class1': 8, 'class2': 4}\n2020-11-22 17:19:46,287 - __main__ - INFO -  val subset (20.0%) encodings counts after stratification: {'class0': 4, 'class1': 8, 'class2': 4}\n.                                                                                         [100%]\n========================================== warnings summary ===========================================\n/home/richard/src/DENDRA/seeweed/venv/lib/python3.7/site-packages/_pytest/config/__init__.py:1040\n  /home/richard/src/DENDRA/seeweed/venv/lib/python3.7/site-packages/_pytest/config/__init__.py:1040: PytestAssertRewriteWarning: Module already imported so cannot be rewritten: typeguard\n    self._mark_plugins_for_rewrite(hook)\n\n-- Docs: https://docs.pytest.org/en/stable/warnings.html\n7 passed, 1 warning in 0.15s"
+  },
+  {
+    "objectID": "posts/2019-06-03-installing-x2go-server.html",
+    "href": "posts/2019-06-03-installing-x2go-server.html",
+    "title": "Installing X2go server for i3",
+    "section": "",
+    "text": "I often like to work remote using a lightweight computer that is connected to a (remote) beefy server. I tried to follow this guide for creating a remote Linux workstation on a VPS.\nHere’s how I modified the guide and dealt with errors.\n\nX2Go Server configuration\nFirst, I installed i3 instead of xfce4:\napt install i3\nNext, I created an ~/.xinitrc:\n#!/bin/sh\nexec i3\nand made it executable with chmod +x ~/.xinitrc.\nNext, I copied over the default i3 config file:\ncp /etc/i3/config ~/.config/i3/config\nI made sure to start x2go on my server:\nservice x2goserver start\nI edited ~/.profile. I commented out the last line which said mesg n || true and replaced it with tty -s && mesg n. Activate it with source .bashrc.\n\n\nX2Go client configuration\nFor the session type, I selected “Custom desktop” and for the command I put /usr/bin/i3.\nFrustratingly, I still had issues with the ssh keys.\nI had some issues, though. I would be able to ssh into my host through the cli, but whenever I tried to connect via the x2go client it would prompt me for the password 3 times and throw an error,\nAccess denied. Authentication that can continue:\npublickey\nFinally, the solution was to delete the X2go session entry and retype the information from scratch."
+  },
+  {
+    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html",
+    "href": "posts/2024-08-26-in-defense-of-python-assertions.html",
+    "title": "In defense of Python assertions",
+    "section": "",
+    "text": "When new devs join my team, I inevitably hear that assertions are bad. This might be a spicy take, but I’m here to argue that assertions, when used correctly, can be great to use.\nI use Python’s assert statements a lot: for debugging, testing, and documenting assumptions. But before I make my case, let’s steelman the arguments against them."
+  },
+  {
+    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#they-can-be-sneakily-disabled",
+    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#they-can-be-sneakily-disabled",
+    "title": "In defense of Python assertions",
+    "section": "1. They can be sneakily disabled",
+    "text": "1. They can be sneakily disabled\nWhen you run Python in optimized mode (python -O), assertions are disabled. This is bad news if your code relies on them.\nNow, in 10 years of using Python, I’ve never seen anyone use -O. But, we shouldn’t assume that downstream users won’t."
+  },
+  {
+    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#assertionerrors-are-not-very-informative",
+    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#assertionerrors-are-not-very-informative",
+    "title": "In defense of Python assertions",
+    "section": "2. AssertionErrors are not very informative",
+    "text": "2. AssertionErrors are not very informative\nThis is true, which is why we should only use it in specific circumstances."
+  },
+  {
+    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#design-by-contract-dbc",
+    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#design-by-contract-dbc",
+    "title": "In defense of Python assertions",
+    "section": "Design by Contract (DbC)",
+    "text": "Design by Contract (DbC)\nDbC is about defining specs for your code using:\n\nPreconditions: conditions that must be true before a function is called.\nPostconditions: conditions that must be true after a function is called.\nInvariants conditions that must be true throughout the execution of a function.\n\nI use assertions to document these expectations. It’s like executable documentation. For example:\ndef fancy_processing(input_df: pd.DataFrame) -&gt; pd.DataFrame:\n    # Precondition\n    assert list(input_df.columns) == sorted(input_df.columns), f\"Columns should be sorted: {input_df.columns}\"\n\n    # ...processing...\n\n    # Postcondidtion\n    assert output_df.columns == input_df.columns, f\"Columns should not change: {output_df.columns} != {input_df.columns}\"\n    return output_df\nThat’s just an illustrative example, but you don’t want to go overboard with obvious checks. Assert important properties are holding true, not obvious things. As I see it, these assertions should always pass if I implemented my application correctly.\nFor more robust DbC in Python, check out:\n\nPydantic for dataclasses\nBeartype for strict typing\nPandera for validating DataFrames\n\nI am aware of the icontract, but I find that it makes code less readable than using @beartype and assertions."
+  },
+  {
+    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#debugging",
+    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#debugging",
+    "title": "In defense of Python assertions",
+    "section": "Debugging",
+    "text": "Debugging\nWhen I am in the thick of coding, assertions are my sanity checks. Unsure of my tensor shapes? Assert it. Unexpected dtypes? Assert it.\nOnce the code’s working, I’ll prune the less useful asserts. Liberal asserts are useful to constrain the search space of bugs, but you don’t need all of them once the code is more production-ready."
+  },
+  {
+    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#handling-production-errors",
+    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#handling-production-errors",
+    "title": "In defense of Python assertions",
+    "section": "Handling production errors",
+    "text": "Handling production errors\nAssertions should never be used to handle errors which are expected to happen in production. For example, never try: ... except AssertionError: .... Instead, use meaningful exceptions."
+  },
+  {
+    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#code-that-always-needs-to-run",
+    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#code-that-always-needs-to-run",
+    "title": "In defense of Python assertions",
+    "section": "Code that always needs to run",
+    "text": "Code that always needs to run\nNever use assertions if you have code that must run. For example, don’t use assertions for sanitizing user input."
+  },
+  {
+    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#gpu-tensors",
+    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#gpu-tensors",
+    "title": "In defense of Python assertions",
+    "section": "GPU Tensors",
+    "text": "GPU Tensors\nWhen dealing with GPU tensors, you should avoid anything that requires the CPU. Using things like print, .item(), and assert implicitly require a syncronization with the CPU."
+  },
+  {
+    "objectID": "posts/2024-02-05-LLM-gathering.html",
+    "href": "posts/2024-02-05-LLM-gathering.html",
+    "title": "LLM Assistant for Better Gatherings",
+    "section": "",
+    "text": "I wanted to share my work from an LLM hackathon hosted by Deonna and Nick from AVL Digital Nomads. I recently have been reading “The Art of Gathering” by Priya Parker, which I recommend (see also: her TED talk and podcast). The goal was to create an assistant to help me brainstorm how to make events that are more meaningful and memorable.\nIn particular, I have an event template, I want to fill in each section of the template with the help of the LLM assistant. Here is the template:\nFrom experience, getting a language model to complete a complex, multi-part task like this one can be a mess. The LLM assistant can get off track, generate a bunch of nonsense, skip entire sections, make up unwanted sections, etc.\nTo help with this, I made a daisy chain of prompts. Each prompt focuses on filling one part of the event plan. Each chat session helps fill in a section of the event template. I then use this growing event plan as the input to the next prompt/chat session. The advantage of this approach is that I can guide the LLM at each step in the right direction, and edit the content manually before moving on.\nI ChatGPT pro access through work, but I didn’t want to use it for a personal project. So instead, I used ChatGPT-4 API calls (specifically gpt-4-turbo-preview) via my note-taking app, Obsidian. All of the prompts from this post are available in my LLM-gathering repository."
+  },
+  {
+    "objectID": "posts/2024-02-05-LLM-gathering.html#part-1-the-purpose",
+    "href": "posts/2024-02-05-LLM-gathering.html#part-1-the-purpose",
+    "title": "LLM Assistant for Better Gatherings",
+    "section": "Part 1: The purpose",
+    "text": "Part 1: The purpose\nThe book emphasizes the importance of a clear purpose for events to be meaningful. To help define the purpose, I’ll start by filling in the first section of the template:\n# The occasion\n\nA potluck dinner at my house.\nI then feed this into my first prompt (step1-purpose). Here is the raw output. The summary was too wordy, so I replied Please summarize the summary even further. Also, add something about promoting health in the purpose and I was mostly happy with that output. So, I edited it lightly and filled in the next section of the template:\n# Purpose of the event\n\n* To strengthen community bonds and foster new connections in a shared, communal experience.\n* To celebrate cultural diversity and promote understanding through a storytelling and cultural exchange centered around food.\n* To encourage healthy eating by inviting participants to bring dishes that are not only personally significant but also reflect healthy food choices, enhancing the gathering's focus on well-being and communal health."
+  },
+  {
+    "objectID": "work.html",
+    "href": "work.html",
+    "title": "My Work",
+    "section": "",
+    "text": "My mission is to leverage my talents and interests to positively impact in the world. I see machine learning as a tool to maximize my impact.\nAt am currently Lead ML Scientist at Dendra Systems, where I work on scaling up ecosystem monitoring and restoration using smart drones.\nFor a 1-page summary of my career, please refer to my resume:\n\n\nDownload ML Resume (pdf)\n\n\nFor a comprehensive summary, please refer to my CV:\n\n\nDownload ML CV (pdf)\n\n\nIn a past life, I was a molecular biologist. Over the years I researched colon cancer, Parkinson’s disease, olfaction, and organic chemistry.\n\n\nProjects\n\nTackling Climate Change Using Automated Afforestation\nDendra Systems - Feb. 2020 → Now\nI am currently the Lead ML engineer at a start-up fighting climate change and deforestation using tree-planting drones. Please refer to CV for detail.\n\n\nImproving Remote Monitoring of Cardiac Patients by Automatically Detecting Arrythmias\nPacemate - Feb. 2019 → Dec. 2019\nI worked as the lead data scientist at an implantable heart device analytics company. I implemented a pipeline to process incoming ECG transmissions from remote devices and classify arrythmias using a deep convolutional neural network. To train this network, I mined years of ground truth data labeled by board-certified electrophysiologists.\n\n\nReinforcement Learning for Tracing Neuron Morphologies\nHanchuan Peng lab. Allen Institute for Brain Science, Seattle, WA, USA - Summer 2018\nI made a proof of concept showing that deep reinforcement learning can be used to automatically trace neuron morphologies.\n\n\nMosquito thermal plume tracking\nAdrienne Fairhall lab. University of Washington, Dept. of Physiology and Biophysics, Seattle, WA, USA - 2014 → 2016\nI worked as a research assistant in Fairhall Lab. We’re interested in answering how the history of sensory experience affects decision-making. As a model, we use mosquitoes host-seeking behavior, as carbon dioxide and thermal signals are known to inform their search. These thermal and olfactory cues have a complicated and sparse structure due to turbulence. How do mosquitoes use spatially- and temporally-sparse information to navigate to hosts? With the Daniel, Riffell and Dickinson labs, we study the behavioral and neurophysiological responses of mosquitoes to temporal patterns in heat and CO2 plumes, which we then use to develop models for multisensory integration.\nMy current role in the project is creating models of mosquitoes tracking turbulent thermal plumes and benchmark those models against wind-tunnel behavioral data. In particular, I am creating driven, damped agent-based dynamical models which reproduce mosquito baseline flight and then test various strategies for plume navigation. These models will be further validated using electrophysiological and tethered flight data to test theories about multi-modal decision-making.\n\n\nHumpback Whale Census\nKimberley Community Whale Research Project, Murdudun, Australia - 2012\nA community-initiated peer-review at the proposed site of the world’s second-largest liquefied gas processing port. Our peer-review’s estimates of humpback migration and breeding activity near James Price Point revealed gross discrepancies in the original oil conglomerate’s survey.\n\n\nMitochondrial dysfunction in Parkinson’s Disease\nLeo Pallanck lab. University of Washington, Dept. of Genome Sciences, Seattle, WA, USA - 2010\nI helped establish a method to grow, stain, and image primary dopaminergic neural culture from Drosophila embryos in order to test whether Parkin and PINK1, proteins involved in Parkinson’s disease, are recruited to depolarized mitochondria in dopaminergic neurons. This research was published in PNAS. I presented a poster at SACNAS 2010.\n\n\nProbing Function of Colon Cancer Proteins\nBrooke M. McCartney lab. Carnegie Mellon University , Dept. of Biological Sciences, Pittsburg, PA, USA - 2009\nI determined that APC2, a protein with probable roles in colon cancer tumorogenesis, did not interact with β-catenin of the Wnt pathway’s destruction complex. I determined that APC2’s conserved N-terminal domain was not essential for its proper localization. This research was published in Genetics. I presented a poster at ABRCMS 2009 and Sigma Xi 2009.\n\n\nQuantifying endogenous sRNA concentrations in C. elegans\nKatherine Walstrom lab. New College of Florida, Dept. of Natural Sciences, Sarasota, FL, USA - 2010 → 2011\nMy thesis proposes a model for RNA Helicase A function in endogenous C. elegans RNAi pathways.\n\n\nSearching for P450 Active site mimics\nPaul Scudder lab. New College of Florida, Dept. of Natural Sciences, Sarasota, FL, USA - 2008 → 2009\nI partially synthesized precursors to a novel high-valent iron-stabilizing macrocycle based on the active site of cytochrome P450."
   }
 ]
