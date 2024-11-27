@@ -13,11 +13,12 @@ When Ilya gave this list to [John Carmack](https://x.com/ID_AA_Carmack) he repor
 There are a few versions of this list online, but the most authoratative I found was from Andrew Carr, an ex-OpenAI employee who found the list in OpenAI's on-boarding docs ([source](https://x.com/andrew_n_carr/status/1752526711311507526)). The most notable difference with this list is the source for Komogorov complexity, which is a chapter out of a book.
 
 
-- **The Annotated Transformer.** Sasha Rush, et al. [[Blog]](https://nlp.seas.harvard.edu/annotated-transformer/) [[GitHub]](https://github.com/harvardnlp/annotated-transformer/)
+- **The Annotated Transformer.** Sasha Rush, et al. Companion article to "Attention is All You Need". [[Blog]](https://nlp.seas.harvard.edu/annotated-transformer/) [[GitHub]](https://github.com/harvardnlp/annotated-transformer/)
+- **Attention Is All You Need.** Ashish Vaswani, et al. [[ArXiv]](https://arxiv.org/abs/1706.03762.pdf)
 - **The First Law of Complexodynamics.** Scott Aaronson. [[Blog]](https://scottaaronson.blog/?p=762)
 - **The Unreasonable Effectiveness of Recurrent Neural Networks.** Andrej Karpathy. [[Blog]](https://karpathy.github.io/2015/05/21/rnn-effectiveness/)
 - **Understanding LSTM Networks.** Christopher Olah. [[Blog]](https://colah.github.io/posts/2015-08-Understanding-LSTMs/)
-- **Recurrent Neural Network Regularization.** Wojciech Zaremba, et al. [[ArXiv]](https://arxiv.org/abs/1409.2329) [[ArXiv]](https://arxiv.org/abs/1409.2329)
+- **Recurrent Neural Network Regularization.** Wojciech Zaremba, et al. [[ArXiv]](https://arxiv.org/abs/1409.2329)
 - **Keeping Neural Networks Simple by Minimizing the Description Length of the Weights.** Geoffrey E. Hinton and Drew van Camp. [[PDF]](https://www.cs.toronto.edu/~hinton/absps/colt93.pdf)
 - **Pointer Networks.** Oriol Vinyals, et al. [[ArXiv]](https://arxiv.org/abs/1506.03134.pdf)
 - **ImageNet Classification with Deep Convolutional Neural Networks.** Alex Krizhevsky, et al. [[PDF]](https://proceedings.neurips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf)
