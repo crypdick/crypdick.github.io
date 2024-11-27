@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Richard Decal">
+<meta name="dcterms.date" content="2024-11-26">
 
-<title>My Work – Richard Decal</title>
+<title>Guide for an eternal unattended server – Richard Decal</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,25 +22,59 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-b663525e4b92bb903b2199e2d401bf36.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-19bbcc6d301408316d57746eade88bff.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-b663525e4b92bb903b2199e2d401bf36.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-19bbcc6d301408316d57746eade88bff.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,17 +104,17 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Richard Decal</span>
     </a>
   </div>
@@ -89,11 +125,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./"> 
+    <a class="nav-link" href="../"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../about.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -112,7 +148,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">Publications</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./work"><i class="bi bi-file-earmark-person" role="img">
+    <a class="dropdown-item" href="../work"><i class="bi bi-file-earmark-person" role="img">
 </i> 
  <span class="dropdown-text">Resume</span></a>
   </li>  
@@ -129,7 +165,7 @@ ul.task-list li input[type="checkbox"] {
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link active" href="./work.html" aria-current="page"> 
+    <a class="nav-link" href="../work.html"> 
 <span class="menu-text">My Work</span></a>
   </li>  
 </ul>
@@ -140,100 +176,54 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Guide for an eternal unattended server</h1>
+            <p class="subtitle lead">Automatic updates, upgrades, reboots, with scripts</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Richard Decal </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 26, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">My Work</h1>
-</div>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
 
 
-</header>
+<p>I have a few servers that I run that I don’t want to have to think about. I want them to be secure, up-to-date, and running smoothly without me having to do anything.</p>
+<p>I have a repo where I keep my script for this: https://github.com/crypdick/unattended-server-quickstart. To use it, you can use the following one-liner:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> https://raw.githubusercontent.com/crypdick/unattended-server-quickstart/main/unattended_server_quickstart.sh <span class="kw">|</span> <span class="fu">sudo</span> bash</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
-<p><img src="assets/img/AIBS_presentation_crop.jpg" class="img-fluid"></p>
-<p>My mission is to leverage my talents and interests to positively impact in the world. I see machine learning as a tool to maximize my impact.</p>
-<p>At am currently Lead ML Scientist at Dendra Systems, where I work on scaling up ecosystem monitoring and restoration using smart drones.</p>
-<p>For a 1-page summary of my career, please refer to <strong>my resume</strong>:</p>
-<center>
-<div class="get-started-wrap">
-<p><a class="btn btn-success btn-lg get-started-btn" href="https://raw.githubusercontent.com/crypdick/Decal-LaTeX-CV/master/Richard-Decal-resume.pdf">Download ML Resume (pdf)</a></p>
-</div>
-</center>
-<p>For a comprehensive summary, please refer to <strong>my CV</strong>:</p>
-<center>
-<div>
-<p><a class="btn btn-success btn-lg" href="https://raw.githubusercontent.com/crypdick/Decal-LaTeX-CV/master/RDecal-ML-CV.pdf">Download ML CV (pdf)</a></p>
-</div>
-</center>
-<p>In a past life, I was a molecular biologist. Over the years I researched colon cancer, Parkinson’s disease, olfaction, and organic chemistry.</p>
-<hr>
-<section id="projects" class="level1">
-<h1>Projects</h1>
-<section id="tackling-climate-change-using-automated-afforestation" class="level3">
-<h3 class="anchored" data-anchor-id="tackling-climate-change-using-automated-afforestation">Tackling Climate Change Using Automated Afforestation</h3>
-<p><em><a href="www.dendra.io">Dendra Systems</a> - Feb.&nbsp;2020 → Now</em></p>
-<p>I am currently the Lead ML engineer at a start-up fighting climate change and deforestation using tree-planting drones. Please refer to CV for detail.</p>
-</section>
-<section id="improving-remote-monitoring-of-cardiac-patients-by-automatically-detecting-arrythmias" class="level3">
-<h3 class="anchored" data-anchor-id="improving-remote-monitoring-of-cardiac-patients-by-automatically-detecting-arrythmias">Improving Remote Monitoring of Cardiac Patients by Automatically Detecting Arrythmias</h3>
-<p><em><a href="www.pacemate.com">Pacemate</a> - Feb.&nbsp;2019 → Dec.&nbsp;2019</em></p>
-<p>I worked as the lead data scientist at an implantable heart device analytics company. I implemented a pipeline to process incoming ECG transmissions from remote devices and classify arrythmias using a deep convolutional neural network. To train this network, I mined years of ground truth data labeled by board-certified electrophysiologists.</p>
-</section>
-<section id="reinforcement-learning-for-tracing-neuron-morphologies" class="level3">
-<h3 class="anchored" data-anchor-id="reinforcement-learning-for-tracing-neuron-morphologies">Reinforcement Learning for Tracing Neuron Morphologies</h3>
-<p><em><a href="https://www.alleninstitute.org/what-we-do/brain-science/research/products-tools/vaa3d/">Hanchuan Peng</a> lab. <a href="https://www.alleninstitute.org/what-we-do/brain-science/">Allen Institute for Brain Science</a>, Seattle, WA, USA - Summer 2018</em></p>
-<p>I made a proof of concept showing that deep reinforcement learning can be used to automatically trace neuron morphologies.</p>
-</section>
-<section id="mosquito-thermal-plume-tracking" class="level3">
-<h3 class="anchored" data-anchor-id="mosquito-thermal-plume-tracking">Mosquito thermal plume tracking</h3>
-<p><em><a href="www.fairhalllab.com">Adrienne Fairhall</a> lab. <a href="uw.edu">University of Washington</a>, Dept. of Physiology and Biophysics, Seattle, WA, USA - 2014 → 2016</em></p>
-<p>I worked as a research assistant in Fairhall Lab. We’re interested in answering how the history of sensory experience affects decision-making. As a model, we use mosquitoes host-seeking behavior, as carbon dioxide and thermal signals are known to inform their search. These thermal and olfactory cues have a complicated and sparse structure due to turbulence. How do mosquitoes use spatially- and temporally-sparse information to navigate to hosts? With the Daniel, Riffell and Dickinson labs, we study the behavioral and neurophysiological responses of mosquitoes to temporal patterns in heat and CO2 plumes, which we then use to develop models for multisensory integration.</p>
-<p>My current role in the project is creating models of mosquitoes tracking turbulent thermal plumes and benchmark those models against wind-tunnel behavioral data. In particular, I am creating driven, damped agent-based dynamical models which reproduce mosquito baseline flight and then test various strategies for plume navigation. These models will be further validated using electrophysiological and tethered flight data to test theories about multi-modal decision-making.</p>
-</section>
-<section id="humpback-whale-census" class="level3">
-<h3 class="anchored" data-anchor-id="humpback-whale-census">Humpback Whale Census</h3>
-<p><em><a href="https://kimberleycommunitywhaleresearch.wordpress.com/">Kimberley Community Whale Research Project</a>, Murdudun, Australia - 2012</em></p>
-<p>A community-initiated peer-review at the proposed site of the world’s second-largest liquefied gas processing port. Our peer-review’s estimates of humpback migration and breeding activity near James Price Point revealed gross discrepancies in the original oil conglomerate’s survey.</p>
-</section>
-<section id="mitochondrial-dysfunction-in-parkinsons-disease" class="level3">
-<h3 class="anchored" data-anchor-id="mitochondrial-dysfunction-in-parkinsons-disease">Mitochondrial dysfunction in Parkinson’s Disease</h3>
-<p><em><a href="http://www.gs.washington.edu/faculty/pallanck.htm">Leo Pallanck</a> lab. <a href="uw.edu">University of Washington</a>, Dept. of Genome Sciences, Seattle, WA, USA - 2010</em></p>
-<p>I helped establish a method to grow, stain, and image primary dopaminergic neural culture from <em>Drosophila</em> embryos in order to test whether Parkin and PINK1, proteins involved in Parkinson’s disease, are recruited to depolarized mitochondria in dopaminergic neurons. This research was <a href="https://www.pnas.org/content/109/26/10438.short">published in PNAS</a>. I presented a poster at SACNAS 2010.</p>
-</section>
-<section id="probing-function-of-colon-cancer-proteins" class="level3">
-<h3 class="anchored" data-anchor-id="probing-function-of-colon-cancer-proteins">Probing Function of Colon Cancer Proteins</h3>
-<p><em><a href="https://www.cmu.edu/bio/people/faculty/mccartney.html">Brooke M. McCartney</a> lab. <a href="cmu.edu">Carnegie Mellon University</a> , Dept. of Biological Sciences, Pittsburg, PA, USA - 2009</em></p>
-<p>I determined that APC2, a protein with probable roles in colon cancer tumorogenesis, did not interact with β-catenin of the Wnt pathway’s destruction complex. I determined that APC2’s conserved N-terminal domain was not essential for its proper localization. This research was <a href="">published in Genetics</a>. I presented a poster at ABRCMS 2009 and Sigma Xi 2009.</p>
-</section>
-<section id="quantifying-endogenous-srna-concentrations-in-c.-elegans" class="level3">
-<h3 class="anchored" data-anchor-id="quantifying-endogenous-srna-concentrations-in-c.-elegans">Quantifying endogenous sRNA concentrations in <em>C. elegans</em></h3>
-<p><em><a href="https://www.ncf.edu/directory/listing/katherine-walstrom/">Katherine Walstrom</a> lab. <a href="ncf.edu">New College of Florida</a>, Dept. of Natural Sciences, Sarasota, FL, USA - 2010 → 2011</em></p>
-<p>My thesis proposes a model for RNA Helicase A function in endogenous <em>C. elegans</em> RNAi pathways.</p>
-</section>
-<section id="searching-for-p450-active-site-mimics" class="level3">
-<h3 class="anchored" data-anchor-id="searching-for-p450-active-site-mimics">Searching for P450 Active site mimics</h3>
-<p><em><a href="https://www.ncf.edu/directory/listing/paul-scudder/">Paul Scudder</a> lab. <a href="ncf.edu">New College of Florida</a>, Dept. of Natural Sciences, Sarasota, FL, USA - 2008 → 2009</em></p>
-<p>I partially synthesized precursors to a novel high-valent iron-stabilizing macrocycle based on the active site of cytochrome P450.</p>
-
-
-</section>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

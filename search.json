@@ -21,6 +21,13 @@
     "text": "Part 1: The purpose\nThe book emphasizes the importance of a clear purpose for events to be meaningful. To help define the purpose, I’ll start by filling in the first section of the template:\n# The occasion\n\nA potluck dinner at my house.\nI then feed this into my first prompt (step1-purpose). Here is the raw output. The summary was too wordy, so I replied Please summarize the summary even further. Also, add something about promoting health in the purpose and I was mostly happy with that output. So, I edited it lightly and filled in the next section of the template:\n# Purpose of the event\n\n* To strengthen community bonds and foster new connections in a shared, communal experience.\n* To celebrate cultural diversity and promote understanding through a storytelling and cultural exchange centered around food.\n* To encourage healthy eating by inviting participants to bring dishes that are not only personally significant but also reflect healthy food choices, enhancing the gathering's focus on well-being and communal health."
   },
   {
+    "objectID": "posts/2020-11-08-Automatically-generate-Kedro-dataset-directories.html",
+    "href": "posts/2020-11-08-Automatically-generate-Kedro-dataset-directories.html",
+    "title": "Automatically creating Kedro dataset directories",
+    "section": "",
+    "text": "If you use Kedro for data pipelines, you may have had issues saving datasets if the dataset directory does not already exist. Instead of manually creating these data folders, here is a hook which automatically creates any missing directories. In the process, it’ll also automatically generate a .gitkeep file.\nimport logging\nimport os\nfrom pathlib import Path\n\nfrom kedro.framework.hooks import hook_impl\n\nlogger = logging.getLogger(__name__)\n\n\nclass CreateDatasetFoldersHook:\n    \"\"\"\n    For each dataset in the Kedro catalog, recursively create parent directories.\n\n    This prevents the sad situation where at the end of a pipeline run, the job fails with an IO error.\n\n    See https://discourse.kedro.community/t/how-do-i-access-each-dataset-s-dataset-fpath-attribute/164\n    \"\"\"\n\n    @staticmethod\n    @hook_impl\n    def after_catalog_created(catalog, conf_catalog, conf_creds, feed_dict, save_version, load_versions, run_id):\n        entries = catalog.list()\n        for entry in entries:\n            try:\n                dset = getattr(catalog.datasets, entry)\n\n                if hasattr(dset, \"_path\"):\n                    _make_dirs(dset._path)\n                elif hasattr(dset, \"_filepath\"):\n                    _make_dirs(dset._filepath)\n                # some dataset types do not have either of these attributes.\n                else:\n                    pass\n            # catalog.list() includes params. These will cause trouble if you try to load\n            # from the catalog.datasets\n            except AttributeError:\n                pass\n\n\ndef _make_dirs(path_to_make):\n    if not os.path.exists(path_to_make):\n        logger.info(f\"Creating missing path {path_to_make}\")\n        os.makedirs(path_to_make)\n    # creates a .gitkeep file while we're at it\n    Path(os.path.join(path_to_make, \".gitkeep\")).touch()\nCredit to DataEngineerOne, who guided me in the right direction on the kedro.community forum."
+  },
+  {
     "objectID": "posts/2019-09-03-installing-mosh-server-aws.html",
     "href": "posts/2019-09-03-installing-mosh-server-aws.html",
     "title": "Installing Mosh server on AWS",
@@ -33,125 +40,6 @@
     "title": "Installing X2go server for i3",
     "section": "",
     "text": "I often like to work remote using a lightweight computer that is connected to a (remote) beefy server. I tried to follow this guide for creating a remote Linux workstation on a VPS.\nHere’s how I modified the guide and dealt with errors.\n\nX2Go Server configuration\nFirst, I installed i3 instead of xfce4:\napt install i3\nNext, I created an ~/.xinitrc:\n#!/bin/sh\nexec i3\nand made it executable with chmod +x ~/.xinitrc.\nNext, I copied over the default i3 config file:\ncp /etc/i3/config ~/.config/i3/config\nI made sure to start x2go on my server:\nservice x2goserver start\nI edited ~/.profile. I commented out the last line which said mesg n || true and replaced it with tty -s && mesg n. Activate it with source .bashrc.\n\n\nX2Go client configuration\nFor the session type, I selected “Custom desktop” and for the command I put /usr/bin/i3.\nFrustratingly, I still had issues with the ssh keys.\nI had some issues, though. I would be able to ssh into my host through the cli, but whenever I tried to connect via the x2go client it would prompt me for the password 3 times and throw an error,\nAccess denied. Authentication that can continue:\npublickey\nFinally, the solution was to delete the X2go session entry and retype the information from scratch."
-  },
-  {
-    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html",
-    "href": "posts/2024-08-26-in-defense-of-python-assertions.html",
-    "title": "In defense of Python assertions",
-    "section": "",
-    "text": "When new devs join my team, I inevitably hear that assertions are bad. This might be a spicy take, but I’m here to argue that assertions, when used correctly, can be great to use.\nI use Python’s assert statements a lot: for debugging, testing, and documenting assumptions. But before I make my case, let’s steelman the arguments against them."
-  },
-  {
-    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#they-can-be-sneakily-disabled",
-    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#they-can-be-sneakily-disabled",
-    "title": "In defense of Python assertions",
-    "section": "1. They can be sneakily disabled",
-    "text": "1. They can be sneakily disabled\nWhen you run Python in optimized mode (python -O), assertions are disabled. This is bad news if your code relies on them.\nNow, in 10 years of using Python, I’ve never seen anyone use -O. But, we shouldn’t assume that downstream users won’t."
-  },
-  {
-    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#assertionerrors-are-not-very-informative",
-    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#assertionerrors-are-not-very-informative",
-    "title": "In defense of Python assertions",
-    "section": "2. AssertionErrors are not very informative",
-    "text": "2. AssertionErrors are not very informative\nThis is true, which is why we should only use it in specific circumstances."
-  },
-  {
-    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#design-by-contract-dbc",
-    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#design-by-contract-dbc",
-    "title": "In defense of Python assertions",
-    "section": "Design by Contract (DbC)",
-    "text": "Design by Contract (DbC)\nDbC is about defining specs for your code using:\n\nPreconditions: conditions that must be true before a function is called.\nPostconditions: conditions that must be true after a function is called.\nInvariants conditions that must be true throughout the execution of a function.\n\nI use assertions to document these expectations. It’s like executable documentation. For example:\ndef fancy_processing(input_df: pd.DataFrame) -&gt; pd.DataFrame:\n    # Precondition\n    assert list(input_df.columns) == sorted(input_df.columns), f\"Columns should be sorted: {input_df.columns}\"\n\n    # ...processing...\n\n    # Postcondidtion\n    assert output_df.columns == input_df.columns, f\"Columns should not change: {output_df.columns} != {input_df.columns}\"\n    return output_df\nThat’s just an illustrative example, but you don’t want to go overboard with obvious checks. Assert important properties are holding true, not obvious things. As I see it, these assertions should always pass if I implemented my application correctly.\nFor more robust DbC in Python, check out:\n\nPydantic for dataclasses\nBeartype for strict typing\nPandera for validating DataFrames\n\nI am aware of the icontract, but I find that it makes code less readable than using @beartype and assertions."
-  },
-  {
-    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#debugging",
-    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#debugging",
-    "title": "In defense of Python assertions",
-    "section": "Debugging",
-    "text": "Debugging\nWhen I am in the thick of coding, assertions are my sanity checks. Unsure of my tensor shapes? Assert it. Unexpected dtypes? Assert it.\nOnce the code’s working, I’ll prune the less useful asserts. Liberal asserts are useful to constrain the search space of bugs, but you don’t need all of them once the code is more production-ready."
-  },
-  {
-    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#handling-production-errors",
-    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#handling-production-errors",
-    "title": "In defense of Python assertions",
-    "section": "Handling production errors",
-    "text": "Handling production errors\nAssertions should never be used to handle errors which are expected to happen in production. For example, never try: ... except AssertionError: .... Instead, use meaningful exceptions."
-  },
-  {
-    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#code-that-always-needs-to-run",
-    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#code-that-always-needs-to-run",
-    "title": "In defense of Python assertions",
-    "section": "Code that always needs to run",
-    "text": "Code that always needs to run\nNever use assertions if you have code that must run. For example, don’t use assertions for sanitizing user input."
-  },
-  {
-    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#gpu-tensors",
-    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#gpu-tensors",
-    "title": "In defense of Python assertions",
-    "section": "GPU Tensors",
-    "text": "GPU Tensors\nWhen dealing with GPU tensors, you should avoid anything that requires the CPU. Using things like print, .item(), and assert implicitly require a syncronization with the CPU."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Richard Decal",
-    "section": "",
-    "text": "In defense of Python assertions\n\n\n\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nAug 26, 2024\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Assistant for Better Gatherings\n\n\nUsing a daisy chain of prompts to plan a potluck\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nFeb 5, 2024\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nGetting Immersed VR setup on Ubuntu\n\n\nDocumenting how to get Immersed VR working on Ubuntu Linux\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nFeb 1, 2024\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nRichard’s ML Study Guide\n\n\nA collection of study materials for machine learning.\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nJan 17, 2024\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nHow to do stratified splitting of Multi-class Multi-labeled image classification data\n\n\nComplete with code and unit tests.\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nNov 22, 2020\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nAutomatically creating Kedro dataset directories\n\n\nAvoiding IO errors at the end of pipelines with a simple hook.\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nNov 8, 2020\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nInstalling Mosh server on AWS\n\n\nAlso works for other VPS\n\n\n\n\n\n\n\n\nSep 3, 2019\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nInstalling X2go server for i3\n\n\n\n\n\n\nnotes\n\n\nroadwarrior\n\n\n\n\n\n\n\n\n\nJun 3, 2019\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nAI for Social Good Podcast Series\n\n\n\n\n\n\nrecommendations\n\n\n\n\n\n\n\n\n\nFeb 21, 2019\n\n\nRichard Decal\n\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About Me",
-    "section": "",
-    "text": "I’m a series of spacetime events called Richard (or Ricardo in some circles). I use machine learning to scale ecosystem restoration using drones."
-  },
-  {
-    "objectID": "about.html#outdoors",
-    "href": "about.html#outdoors",
-    "title": "About Me",
-    "section": "Outdoors",
-    "text": "Outdoors\n\nI spend as much time as possible outdoors. I love hiking, camping, mountain biking, kayaking, and rock climbing."
-  },
-  {
-    "objectID": "about.html#travel",
-    "href": "about.html#travel",
-    "title": "About Me",
-    "section": "Travel",
-    "text": "Travel\n\nI have visited 28+ countries, done 3 major bicycle tours (Seattle ↣ San Francisco, around Taiwan, and around New Zealand), and been to 47 of 50 U.S. states.\nI’ve hitchhiked over 10,000 miles in the US, Taiwan, Thailand, Australia, and New Zealand.\nI converted a jumbo news crew van into a tiny home and lived the van life for 2 years. It had roof solar, a fridge/freezer, and fit everything I owned!"
-  },
-  {
-    "objectID": "about.html#talks-and-interviews",
-    "href": "about.html#talks-and-interviews",
-    "title": "About Me",
-    "section": "Talks and Interviews",
-    "text": "Talks and Interviews\n\nTalk on Data Curation at the AI in Production Conference ’24.\nRay Summit ’21: “How Ray and Anyscale Make it Easy to do Massive-scale ML on Aerial Imagery”\nTalk for TA3M Seattle: “How AI can be abused by surveillance states” (presentation slides)\nInterview with KOMO news in Seattle over the net neutrality debate\nFor my academic/industry talks, please refer to my work page."
-  },
-  {
-    "objectID": "about.html#volunteering",
-    "href": "about.html#volunteering",
-    "title": "About Me",
-    "section": "Volunteering",
-    "text": "Volunteering\n\nI helped organize a Surveillance Self-Defense Workshop for Activists with TA3M Seattle.\nI organized and led a protest against Congress’s plans to end the Internet’s decentralized nature (downtown Seattle, December 2014).\nI volunteered for 1.5 months for a community in Mota Lava, Vanuatu. We brought an oil press to make virgin coconut oil.\nI volunteered for a whale monitoring survey to study how the world’s largest LPG processing center would affect the world’s largest Humpback whale calving area near James Price Point, Australia."
-  },
-  {
-    "objectID": "about.html#art",
-    "href": "about.html#art",
-    "title": "About Me",
-    "section": "Art",
-    "text": "Art\n\nI was Artist in Residence at the Sir James Wallace Arts Trust for a few months in 2015. A selection of my works are in circulation around public spaces in New Zealand. Links to my Flickr below!\nI find the intersection of art and machine learning fascinating. I maintain a repository of research projects and use AI art generators."
-  },
-  {
-    "objectID": "about.html#it",
-    "href": "about.html#it",
-    "title": "About Me",
-    "section": "IT",
-    "text": "IT\n\nSelf-hosted services - My server runs Nextcloud, Plex, a Tor relay, an email server, a ZFS NAS, and more.\nDIY Smart Home - I made various smart-home devices: a smart mirror, automated hydroponics for my garden, a mobile filesharing mesh network, a digitial assistant, and more.\nRemote development - I am persuing the ultimate mobile ergonomic workstation. My current setup is a NReal air headset, a 5G hotspot, and a remote tunnel over Android."
-  },
-  {
-    "objectID": "work.html",
-    "href": "work.html",
-    "title": "My Work",
-    "section": "",
-    "text": "My mission is to leverage my talents and interests to positively impact in the world. I see machine learning as a tool to maximize my impact.\nAt am currently Lead ML Scientist at Dendra Systems, where I work on scaling up ecosystem monitoring and restoration using smart drones.\nFor a 1-page summary of my career, please refer to my resume:\n\n\nDownload ML Resume (pdf)\n\n\nFor a comprehensive summary, please refer to my CV:\n\n\nDownload ML CV (pdf)\n\n\nIn a past life, I was a molecular biologist. Over the years I researched colon cancer, Parkinson’s disease, olfaction, and organic chemistry.\n\n\nProjects\n\nTackling Climate Change Using Automated Afforestation\nDendra Systems - Feb. 2020 → Now\nI am currently the Lead ML engineer at a start-up fighting climate change and deforestation using tree-planting drones. Please refer to CV for detail.\n\n\nImproving Remote Monitoring of Cardiac Patients by Automatically Detecting Arrythmias\nPacemate - Feb. 2019 → Dec. 2019\nI worked as the lead data scientist at an implantable heart device analytics company. I implemented a pipeline to process incoming ECG transmissions from remote devices and classify arrythmias using a deep convolutional neural network. To train this network, I mined years of ground truth data labeled by board-certified electrophysiologists.\n\n\nReinforcement Learning for Tracing Neuron Morphologies\nHanchuan Peng lab. Allen Institute for Brain Science, Seattle, WA, USA - Summer 2018\nI made a proof of concept showing that deep reinforcement learning can be used to automatically trace neuron morphologies.\n\n\nMosquito thermal plume tracking\nAdrienne Fairhall lab. University of Washington, Dept. of Physiology and Biophysics, Seattle, WA, USA - 2014 → 2016\nI worked as a research assistant in Fairhall Lab. We’re interested in answering how the history of sensory experience affects decision-making. As a model, we use mosquitoes host-seeking behavior, as carbon dioxide and thermal signals are known to inform their search. These thermal and olfactory cues have a complicated and sparse structure due to turbulence. How do mosquitoes use spatially- and temporally-sparse information to navigate to hosts? With the Daniel, Riffell and Dickinson labs, we study the behavioral and neurophysiological responses of mosquitoes to temporal patterns in heat and CO2 plumes, which we then use to develop models for multisensory integration.\nMy current role in the project is creating models of mosquitoes tracking turbulent thermal plumes and benchmark those models against wind-tunnel behavioral data. In particular, I am creating driven, damped agent-based dynamical models which reproduce mosquito baseline flight and then test various strategies for plume navigation. These models will be further validated using electrophysiological and tethered flight data to test theories about multi-modal decision-making.\n\n\nHumpback Whale Census\nKimberley Community Whale Research Project, Murdudun, Australia - 2012\nA community-initiated peer-review at the proposed site of the world’s second-largest liquefied gas processing port. Our peer-review’s estimates of humpback migration and breeding activity near James Price Point revealed gross discrepancies in the original oil conglomerate’s survey.\n\n\nMitochondrial dysfunction in Parkinson’s Disease\nLeo Pallanck lab. University of Washington, Dept. of Genome Sciences, Seattle, WA, USA - 2010\nI helped establish a method to grow, stain, and image primary dopaminergic neural culture from Drosophila embryos in order to test whether Parkin and PINK1, proteins involved in Parkinson’s disease, are recruited to depolarized mitochondria in dopaminergic neurons. This research was published in PNAS. I presented a poster at SACNAS 2010.\n\n\nProbing Function of Colon Cancer Proteins\nBrooke M. McCartney lab. Carnegie Mellon University , Dept. of Biological Sciences, Pittsburg, PA, USA - 2009\nI determined that APC2, a protein with probable roles in colon cancer tumorogenesis, did not interact with β-catenin of the Wnt pathway’s destruction complex. I determined that APC2’s conserved N-terminal domain was not essential for its proper localization. This research was published in Genetics. I presented a poster at ABRCMS 2009 and Sigma Xi 2009.\n\n\nQuantifying endogenous sRNA concentrations in C. elegans\nKatherine Walstrom lab. New College of Florida, Dept. of Natural Sciences, Sarasota, FL, USA - 2010 → 2011\nMy thesis proposes a model for RNA Helicase A function in endogenous C. elegans RNAi pathways.\n\n\nSearching for P450 Active site mimics\nPaul Scudder lab. New College of Florida, Dept. of Natural Sciences, Sarasota, FL, USA - 2008 → 2009\nI partially synthesized precursors to a novel high-valent iron-stabilizing macrocycle based on the active site of cytochrome P450."
   },
   {
     "objectID": "posts/2024-01-17-Richards-ML-Study-Guide.html",
@@ -231,11 +119,123 @@
     "text": "Mechanistic Interpretability\n\nNeel Nanda\nNeel Nanda is a great person to follow in the mechinterp space. He consistenly has great content, from his interviews, his mechinterp blog, YouTube channel, and outrageously detailed mechinterp glossary.\n\n\nDistill.pub\nDistill is a journal that publishes articles on machine learning. It aims to be a more visual, intuitive, and interactive vision of academic publishing for ML. The articles are extremely high quality and are a great resource for learning about advanced topics in ML. The articles have an emphasis on interpretability of ML models, deliving into the “black box” of neural networks by examining the behavior of specific circuits within the network.\nTheir Transformer Circuits article is one of the best I’ve found for deeply understanding how the residual streams work in transformers.\nOne of the core Distill authors, Chris Olah, also has a personal blog with some legendary articles."
   },
   {
-    "objectID": "posts/ai-social-good-podcast/2020-11-08-Automatically-generate-Kedro-dataset-directories.html",
-    "href": "posts/ai-social-good-podcast/2020-11-08-Automatically-generate-Kedro-dataset-directories.html",
-    "title": "Automatically creating Kedro dataset directories",
+    "objectID": "work.html",
+    "href": "work.html",
+    "title": "My Work",
     "section": "",
-    "text": "If you use Kedro for data pipelines, you may have had issues saving datasets if the dataset directory does not already exist. Instead of manually creating these data folders, here is a hook which automatically creates any missing directories. In the process, it’ll also automatically generate a .gitkeep file.\nimport logging\nimport os\nfrom pathlib import Path\n\nfrom kedro.framework.hooks import hook_impl\n\nlogger = logging.getLogger(__name__)\n\n\nclass CreateDatasetFoldersHook:\n    \"\"\"\n    For each dataset in the Kedro catalog, recursively create parent directories.\n\n    This prevents the sad situation where at the end of a pipeline run, the job fails with an IO error.\n\n    See https://discourse.kedro.community/t/how-do-i-access-each-dataset-s-dataset-fpath-attribute/164\n    \"\"\"\n\n    @staticmethod\n    @hook_impl\n    def after_catalog_created(catalog, conf_catalog, conf_creds, feed_dict, save_version, load_versions, run_id):\n        entries = catalog.list()\n        for entry in entries:\n            try:\n                dset = getattr(catalog.datasets, entry)\n\n                if hasattr(dset, \"_path\"):\n                    _make_dirs(dset._path)\n                elif hasattr(dset, \"_filepath\"):\n                    _make_dirs(dset._filepath)\n                # some dataset types do not have either of these attributes.\n                else:\n                    pass\n            # catalog.list() includes params. These will cause trouble if you try to load\n            # from the catalog.datasets\n            except AttributeError:\n                pass\n\n\ndef _make_dirs(path_to_make):\n    if not os.path.exists(path_to_make):\n        logger.info(f\"Creating missing path {path_to_make}\")\n        os.makedirs(path_to_make)\n    # creates a .gitkeep file while we're at it\n    Path(os.path.join(path_to_make, \".gitkeep\")).touch()\nCredit to DataEngineerOne, who guided me in the right direction on the kedro.community forum."
+    "text": "My mission is to leverage my talents and interests to positively impact in the world. I see machine learning as a tool to maximize my impact.\nAt am currently Lead ML Scientist at Dendra Systems, where I work on scaling up ecosystem monitoring and restoration using smart drones.\nFor a 1-page summary of my career, please refer to my resume:\n\n\nDownload ML Resume (pdf)\n\n\nFor a comprehensive summary, please refer to my CV:\n\n\nDownload ML CV (pdf)\n\n\nIn a past life, I was a molecular biologist. Over the years I researched colon cancer, Parkinson’s disease, olfaction, and organic chemistry.\n\n\nProjects\n\nTackling Climate Change Using Automated Afforestation\nDendra Systems - Feb. 2020 → Now\nI am currently the Lead ML engineer at a start-up fighting climate change and deforestation using tree-planting drones. Please refer to CV for detail.\n\n\nImproving Remote Monitoring of Cardiac Patients by Automatically Detecting Arrythmias\nPacemate - Feb. 2019 → Dec. 2019\nI worked as the lead data scientist at an implantable heart device analytics company. I implemented a pipeline to process incoming ECG transmissions from remote devices and classify arrythmias using a deep convolutional neural network. To train this network, I mined years of ground truth data labeled by board-certified electrophysiologists.\n\n\nReinforcement Learning for Tracing Neuron Morphologies\nHanchuan Peng lab. Allen Institute for Brain Science, Seattle, WA, USA - Summer 2018\nI made a proof of concept showing that deep reinforcement learning can be used to automatically trace neuron morphologies.\n\n\nMosquito thermal plume tracking\nAdrienne Fairhall lab. University of Washington, Dept. of Physiology and Biophysics, Seattle, WA, USA - 2014 → 2016\nI worked as a research assistant in Fairhall Lab. We’re interested in answering how the history of sensory experience affects decision-making. As a model, we use mosquitoes host-seeking behavior, as carbon dioxide and thermal signals are known to inform their search. These thermal and olfactory cues have a complicated and sparse structure due to turbulence. How do mosquitoes use spatially- and temporally-sparse information to navigate to hosts? With the Daniel, Riffell and Dickinson labs, we study the behavioral and neurophysiological responses of mosquitoes to temporal patterns in heat and CO2 plumes, which we then use to develop models for multisensory integration.\nMy current role in the project is creating models of mosquitoes tracking turbulent thermal plumes and benchmark those models against wind-tunnel behavioral data. In particular, I am creating driven, damped agent-based dynamical models which reproduce mosquito baseline flight and then test various strategies for plume navigation. These models will be further validated using electrophysiological and tethered flight data to test theories about multi-modal decision-making.\n\n\nHumpback Whale Census\nKimberley Community Whale Research Project, Murdudun, Australia - 2012\nA community-initiated peer-review at the proposed site of the world’s second-largest liquefied gas processing port. Our peer-review’s estimates of humpback migration and breeding activity near James Price Point revealed gross discrepancies in the original oil conglomerate’s survey.\n\n\nMitochondrial dysfunction in Parkinson’s Disease\nLeo Pallanck lab. University of Washington, Dept. of Genome Sciences, Seattle, WA, USA - 2010\nI helped establish a method to grow, stain, and image primary dopaminergic neural culture from Drosophila embryos in order to test whether Parkin and PINK1, proteins involved in Parkinson’s disease, are recruited to depolarized mitochondria in dopaminergic neurons. This research was published in PNAS. I presented a poster at SACNAS 2010.\n\n\nProbing Function of Colon Cancer Proteins\nBrooke M. McCartney lab. Carnegie Mellon University , Dept. of Biological Sciences, Pittsburg, PA, USA - 2009\nI determined that APC2, a protein with probable roles in colon cancer tumorogenesis, did not interact with β-catenin of the Wnt pathway’s destruction complex. I determined that APC2’s conserved N-terminal domain was not essential for its proper localization. This research was published in Genetics. I presented a poster at ABRCMS 2009 and Sigma Xi 2009.\n\n\nQuantifying endogenous sRNA concentrations in C. elegans\nKatherine Walstrom lab. New College of Florida, Dept. of Natural Sciences, Sarasota, FL, USA - 2010 → 2011\nMy thesis proposes a model for RNA Helicase A function in endogenous C. elegans RNAi pathways.\n\n\nSearching for P450 Active site mimics\nPaul Scudder lab. New College of Florida, Dept. of Natural Sciences, Sarasota, FL, USA - 2008 → 2009\nI partially synthesized precursors to a novel high-valent iron-stabilizing macrocycle based on the active site of cytochrome P450."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About Me",
+    "section": "",
+    "text": "I’m a series of spacetime events called Richard (or Ricardo in some circles). I use machine learning to scale ecosystem restoration using drones."
+  },
+  {
+    "objectID": "about.html#outdoors",
+    "href": "about.html#outdoors",
+    "title": "About Me",
+    "section": "Outdoors",
+    "text": "Outdoors\n\nI spend as much time as possible outdoors. I love hiking, camping, mountain biking, kayaking, and rock climbing."
+  },
+  {
+    "objectID": "about.html#travel",
+    "href": "about.html#travel",
+    "title": "About Me",
+    "section": "Travel",
+    "text": "Travel\n\nI have visited 28+ countries, done 3 major bicycle tours (Seattle ↣ San Francisco, around Taiwan, and around New Zealand), and been to 47 of 50 U.S. states.\nI’ve hitchhiked over 10,000 miles in the US, Taiwan, Thailand, Australia, and New Zealand.\nI converted a jumbo news crew van into a tiny home and lived the van life for 2 years. It had roof solar, a fridge/freezer, and fit everything I owned!"
+  },
+  {
+    "objectID": "about.html#talks-and-interviews",
+    "href": "about.html#talks-and-interviews",
+    "title": "About Me",
+    "section": "Talks and Interviews",
+    "text": "Talks and Interviews\n\nTalk on Data Curation at the AI in Production Conference ’24.\nRay Summit ’21: “How Ray and Anyscale Make it Easy to do Massive-scale ML on Aerial Imagery”\nTalk for TA3M Seattle: “How AI can be abused by surveillance states” (presentation slides)\nInterview with KOMO news in Seattle over the net neutrality debate\nFor my academic/industry talks, please refer to my work page."
+  },
+  {
+    "objectID": "about.html#volunteering",
+    "href": "about.html#volunteering",
+    "title": "About Me",
+    "section": "Volunteering",
+    "text": "Volunteering\n\nI helped organize a Surveillance Self-Defense Workshop for Activists with TA3M Seattle.\nI organized and led a protest against Congress’s plans to end the Internet’s decentralized nature (downtown Seattle, December 2014).\nI volunteered for 1.5 months for a community in Mota Lava, Vanuatu. We brought an oil press to make virgin coconut oil.\nI volunteered for a whale monitoring survey to study how the world’s largest LPG processing center would affect the world’s largest Humpback whale calving area near James Price Point, Australia."
+  },
+  {
+    "objectID": "about.html#art",
+    "href": "about.html#art",
+    "title": "About Me",
+    "section": "Art",
+    "text": "Art\n\nI was Artist in Residence at the Sir James Wallace Arts Trust for a few months in 2015. A selection of my works are in circulation around public spaces in New Zealand. Links to my Flickr below!\nI find the intersection of art and machine learning fascinating. I maintain a repository of research projects and use AI art generators."
+  },
+  {
+    "objectID": "about.html#it",
+    "href": "about.html#it",
+    "title": "About Me",
+    "section": "IT",
+    "text": "IT\n\nSelf-hosted services - My server runs Nextcloud, Plex, a Tor relay, an email server, a ZFS NAS, and more.\nDIY Smart Home - I made various smart-home devices: a smart mirror, automated hydroponics for my garden, a mobile filesharing mesh network, a digitial assistant, and more.\nRemote development - I am persuing the ultimate mobile ergonomic workstation. My current setup is a NReal air headset, a 5G hotspot, and a remote tunnel over Android."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Richard Decal",
+    "section": "",
+    "text": "Guide for an eternal unattended server\n\n\nAutomatic updates, upgrades, reboots, with scripts\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nNov 26, 2024\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nIn defense of Python assertions\n\n\n\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nAug 26, 2024\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Assistant for Better Gatherings\n\n\nUsing a daisy chain of prompts to plan a potluck\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nFeb 5, 2024\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nGetting Immersed VR setup on Ubuntu\n\n\nDocumenting how to get Immersed VR working on Ubuntu Linux\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nFeb 1, 2024\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nRichard’s ML Study Guide\n\n\nA collection of study materials for machine learning.\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nJan 17, 2024\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nHow to do stratified splitting of Multi-class Multi-labeled image classification data\n\n\nComplete with code and unit tests.\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nNov 22, 2020\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nAutomatically creating Kedro dataset directories\n\n\nAvoiding IO errors at the end of pipelines with a simple hook.\n\n\n\ncode\n\n\n\n\n\n\n\n\n\nNov 8, 2020\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nInstalling Mosh server on AWS\n\n\nAlso works for other VPS\n\n\n\n\n\n\n\n\nSep 3, 2019\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nInstalling X2go server for i3\n\n\n\n\n\n\nnotes\n\n\nroadwarrior\n\n\n\n\n\n\n\n\n\nJun 3, 2019\n\n\nRichard Decal\n\n\n\n\n\n\n\n\n\n\n\n\nAI for Social Good Podcast Series\n\n\n\n\n\n\nrecommendations\n\n\n\n\n\n\n\n\n\nFeb 21, 2019\n\n\nRichard Decal\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html",
+    "href": "posts/2024-08-26-in-defense-of-python-assertions.html",
+    "title": "In defense of Python assertions",
+    "section": "",
+    "text": "When new devs join my team, I inevitably hear that assertions are bad. This might be a spicy take, but I’m here to argue that assertions, when used correctly, can be great to use.\nI use Python’s assert statements a lot: for debugging, testing, and documenting assumptions. But before I make my case, let’s steelman the arguments against them."
+  },
+  {
+    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#they-can-be-sneakily-disabled",
+    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#they-can-be-sneakily-disabled",
+    "title": "In defense of Python assertions",
+    "section": "1. They can be sneakily disabled",
+    "text": "1. They can be sneakily disabled\nWhen you run Python in optimized mode (python -O), assertions are disabled. This is bad news if your code relies on them.\nNow, in 10 years of using Python, I’ve never seen anyone use -O. But, we shouldn’t assume that downstream users won’t."
+  },
+  {
+    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#assertionerrors-are-not-very-informative",
+    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#assertionerrors-are-not-very-informative",
+    "title": "In defense of Python assertions",
+    "section": "2. AssertionErrors are not very informative",
+    "text": "2. AssertionErrors are not very informative\nThis is true, which is why we should only use it in specific circumstances."
+  },
+  {
+    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#design-by-contract-dbc",
+    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#design-by-contract-dbc",
+    "title": "In defense of Python assertions",
+    "section": "Design by Contract (DbC)",
+    "text": "Design by Contract (DbC)\nDbC is about defining specs for your code using:\n\nPreconditions: conditions that must be true before a function is called.\nPostconditions: conditions that must be true after a function is called.\nInvariants conditions that must be true throughout the execution of a function.\n\nI use assertions to document these expectations. It’s like executable documentation. For example:\ndef fancy_processing(input_df: pd.DataFrame) -&gt; pd.DataFrame:\n    # Precondition\n    assert list(input_df.columns) == sorted(input_df.columns), f\"Columns should be sorted: {input_df.columns}\"\n\n    # ...processing...\n\n    # Postcondidtion\n    assert output_df.columns == input_df.columns, f\"Columns should not change: {output_df.columns} != {input_df.columns}\"\n    return output_df\nThat’s just an illustrative example, but you don’t want to go overboard with obvious checks. Assert important properties are holding true, not obvious things. As I see it, these assertions should always pass if I implemented my application correctly.\nFor more robust DbC in Python, check out:\n\nPydantic for dataclasses\nBeartype for strict typing\nPandera for validating DataFrames\n\nI am aware of the icontract, but I find that it makes code less readable than using @beartype and assertions."
+  },
+  {
+    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#debugging",
+    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#debugging",
+    "title": "In defense of Python assertions",
+    "section": "Debugging",
+    "text": "Debugging\nWhen I am in the thick of coding, assertions are my sanity checks. Unsure of my tensor shapes? Assert it. Unexpected dtypes? Assert it.\nOnce the code’s working, I’ll prune the less useful asserts. Liberal asserts are useful to constrain the search space of bugs, but you don’t need all of them once the code is more production-ready."
+  },
+  {
+    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#handling-production-errors",
+    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#handling-production-errors",
+    "title": "In defense of Python assertions",
+    "section": "Handling production errors",
+    "text": "Handling production errors\nAssertions should never be used to handle errors which are expected to happen in production. For example, never try: ... except AssertionError: .... Instead, use meaningful exceptions."
+  },
+  {
+    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#code-that-always-needs-to-run",
+    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#code-that-always-needs-to-run",
+    "title": "In defense of Python assertions",
+    "section": "Code that always needs to run",
+    "text": "Code that always needs to run\nNever use assertions if you have code that must run. For example, don’t use assertions for sanitizing user input."
+  },
+  {
+    "objectID": "posts/2024-08-26-in-defense-of-python-assertions.html#gpu-tensors",
+    "href": "posts/2024-08-26-in-defense-of-python-assertions.html#gpu-tensors",
+    "title": "In defense of Python assertions",
+    "section": "GPU Tensors",
+    "text": "GPU Tensors\nWhen dealing with GPU tensors, you should avoid anything that requires the CPU. Using things like print, .item(), and assert implicitly require a syncronization with the CPU."
   },
   {
     "objectID": "posts/2024-02-01-immersed-vr-ubuntu.html",
@@ -243,6 +243,13 @@
     "title": "Getting Immersed VR setup on Ubuntu",
     "section": "",
     "text": "In my quest to perfect my “road warrior” setup, I have been experimenting with coding in VR. I have been using the Immersed VR app on my Quest 3 headset to create a virtual workspace. Unfortunately, the official Immersed documentation is not very clear on how to get Immersed VR setup on Ubuntu. Here are the steps I took to get it working. I would like to credit this blog post by Alexandre Souza for pointing me in the right direction, my contribution is porting the steps to Ubuntu Linux.\nSteps: * Follow the instructions on the Immersed VR website to install the Immersed VR app on your headset and on Linux (download page here). * Install the required dependencies:\nsudo apt install v4l2loopback-dkms v4l2loopback-utils\n\nCreate a file to start the v4l2loopback service at boot:\n\nsudo vim /etc/systemd/system/v4l2loopback.service\nHere are the settings I used for the service file, based on the aforementioned blog post. The device is set to /dev/video9 to avoid conflicts with other devices.\n[Unit]\nDescription=v4l2loopback\n\n[Service]\nExecStart=/bin/modprobe v4l2loopback video_nr=9 card_label=\"ImmersedVR\" exclusive_caps=1\nExecStop=/bin/rmmod v4l2loopback\nType=simple\nRemainAfterExit=yes\n\n[Install]\nWantedBy=default.target\n\nEnable the service:\n\nsudo systemctl enable v4l2loopback\n\nStart the service:\n\nsudo systemctl start v4l2loopback\n\nUpdate the ~/.ImmersedConf file to use the new device:\n\n# before:\n# \"CameraDevice\": \"/dev/video0\"\n# after:\n\"CameraDevice\": \"/dev/video9\"\n\nRun the ImmersedVR AppImage:\n\nchmod +x Immersed-x86_64.AppImage\n./Immersed-x86_64.AppImage\nOn my machine, the app will display a “Virtual camera device is not found at /dev/video0” error, even though we set the config file to use /dev/video9. I just click “OK” and the app correctly uses the /dev/video9 device.\nAnother tip is that you can create virtual monitors, even if you don’t have a physical monitor connected. This is natively supported by the Immersed app on Windows/Mac, but for Linux you need to use a tool like xrandr to create a virtual monitor. This blog post by Craig Wardman explains how to do it."
+  },
+  {
+    "objectID": "posts/2024-11-26-unattended-server-guide.html",
+    "href": "posts/2024-11-26-unattended-server-guide.html",
+    "title": "Guide for an eternal unattended server",
+    "section": "",
+    "text": "I have a few servers that I run that I don’t want to have to think about. I want them to be secure, up-to-date, and running smoothly without me having to do anything.\nI have a repo where I keep my script for this: https://github.com/crypdick/unattended-server-quickstart. To use it, you can use the following one-liner:\ncurl -s https://raw.githubusercontent.com/crypdick/unattended-server-quickstart/main/unattended_server_quickstart.sh | sudo bash"
   },
   {
     "objectID": "posts/2020-11-22-Howto-stratified-splitting-Multiclass-Multilabeled-image-classification-dataset.html",
