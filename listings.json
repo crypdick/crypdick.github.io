@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/2024-11-27-ilya-ml-guide.html",
       "/posts/2024-11-26-unattended-server-guide.html",
       "/posts/2024-08-26-in-defense-of-python-assertions.html",
       "/posts/2024-02-05-LLM-gathering.html",
