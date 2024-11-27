@@ -2,6 +2,7 @@
 title: In defense of Python assertions
 categories: [code]
 date: "2024-08-26"
+image: /assets/img/defensive_python.png
 ---
 
 # Are Python assertions evil?
