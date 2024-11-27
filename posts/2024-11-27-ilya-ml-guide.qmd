@@ -1,5 +1,6 @@
 ---
 title: Ilya Sutskever ML Study Guide
+subtitle: A collection of papers recommended by Ilya to get a foundation in ML.
 date: "2024-11-27"
 categories: [recommendations]
 image: /assets/img/ai_tech_tree.png
