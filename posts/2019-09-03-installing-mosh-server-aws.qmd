@@ -3,6 +3,7 @@ title: Installing Mosh server on AWS
 subtitle: Also works for other VPS
 tags: [vps, roadwarrior]
 date: "2019-09-03"
+image: /assets/img/cloud_linux.png
 ---
 
 [Mosh](mosh.org) ("mobile shell") is an `ssh` alternative which is robust to network changes. It is super useful for working on a VPS when you are on a flaky connection or roaming. Here is how to install Mosh on an AWS EC2 instance.
