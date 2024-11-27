@@ -1,7 +1,7 @@
 ---
 title: Installing Mosh server on AWS
 subtitle: Also works for other VPS
-tags: [vps]
+tags: [vps, roadwarrior]
 date: "2019-09-03"
 ---
 
