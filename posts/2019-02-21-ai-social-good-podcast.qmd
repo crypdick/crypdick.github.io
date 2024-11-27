@@ -2,6 +2,7 @@
 title: AI for Social Good Podcast Series
 date: "2019-02-21"
 categories: [recommendations]
+image: /assets/img/ai_social_good.png
 ---
 
 The This Week in Machine Learning and AI Podcast just did a series of interviews with Microsoft researchers working on making the world a better place with AI.
