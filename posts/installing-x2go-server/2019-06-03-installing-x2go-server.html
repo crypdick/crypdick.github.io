@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Richard Decal">
-<meta name="dcterms.date" content="2019-09-03">
+<meta name="dcterms.date" content="2019-06-03">
 
-<title>Installing Mosh server on AWS – Richard Decal</title>
+<title>Installing X2go server for i3 – Richard Decal</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -25,22 +25,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -70,7 +70,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-fixed fullcontent">
@@ -80,7 +80,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Richard Decal</span>
     </a>
   </div>
@@ -91,11 +91,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../"> 
+    <a class="nav-link" href="../../"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -114,7 +114,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">Publications</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../work"><i class="bi bi-file-earmark-person" role="img">
+    <a class="dropdown-item" href="../../work"><i class="bi bi-file-earmark-person" role="img">
 </i> 
  <span class="dropdown-text">Resume</span></a>
   </li>  
@@ -131,7 +131,7 @@ ul.task-list li input[type="checkbox"] {
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="../work.html"> 
+    <a class="nav-link" href="../../work.html"> 
 <span class="menu-text">My Work</span></a>
   </li>  
 </ul>
@@ -145,9 +145,12 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Installing Mosh server on AWS</h1>
-            <p class="subtitle lead">Also works for other VPS</p>
-                      </div>
+      <h1 class="title">Installing X2go server for i3</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">notes</div>
+                <div class="quarto-category">roadwarrior</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -163,7 +166,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">September 3, 2019</p>
+        <p class="date">June 3, 2019</p>
       </div>
     </div>
     
@@ -182,23 +185,33 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p><a href="mosh.org">Mosh</a> (“mobile shell”) is an <code>ssh</code> alternative which is robust to network changes. It is super useful for working on a VPS when you are on a flaky connection or roaming. Here is how to install Mosh on an AWS EC2 instance.</p>
-<p>First, install and run mosh server:</p>
-<pre><code>sudo add-apt-repository ppa:keithw/mosh
-sudo apt-get update &amp;&amp; sudo apt-get upgrade
-sudo apt-get install mosh
-mosh-server  # start the server</code></pre>
-<p>Next, we need to open up firewall rules. I tried running the following code from another guide, which did not work:</p>
-<pre><code>sudo iptables -I INPUT 1 -p udp --dport 60000:61000 -j ACCEPT</code></pre>
-<p>Instead, I had to go to the AWS EC2 console and to open the rules. On the left, go to “Security Groups”. Select the group. Inside the Inbound tab, click “Edit” then “Add Rule”. You want the following settings:</p>
-<ul>
-<li>Type: “Custom UDP”</li>
-<li>Port Range: 60000 - 61000</li>
-<li>Source: leave alone (should automatically have “0.0.0.0/0; ::/0”)</li>
-</ul>
-<p>Save, and now you should be able to access your VPS with mosh. Good luck!</p>
+<p>I often like to work remote using a lightweight computer that is connected to a (remote) beefy server. I tried to follow <a href="https://loskoderos.com/2018/08/05/building-an-ultimate-remote-linux-workstation/">this guide</a> for creating a remote Linux workstation on a VPS.</p>
+<p>Here’s how I modified the guide and dealt with errors.</p>
+<section id="x2go-server-configuration" class="level1">
+<h1>X2Go Server configuration</h1>
+<p>First, I installed i3 instead of xfce4:</p>
+<pre><code>apt install i3</code></pre>
+<p>Next, I created an <code>~/.xinitrc</code>:</p>
+<pre><code>#!/bin/sh
+exec i3</code></pre>
+<p>and made it executable with <code>chmod +x ~/.xinitrc</code>.</p>
+<p>Next, I copied over the default i3 config file:</p>
+<pre><code>cp /etc/i3/config ~/.config/i3/config</code></pre>
+<p>I made sure to start x2go on my server:</p>
+<pre><code>service x2goserver start</code></pre>
+<p>I edited <code>~/.profile</code>. I commented out the last line which said <code>mesg n || true</code> and replaced it with <code>tty -s &amp;&amp; mesg n</code>. Activate it with <code>source .bashrc</code>.</p>
+</section>
+<section id="x2go-client-configuration" class="level1">
+<h1>X2Go client configuration</h1>
+<p>For the session type, I selected “Custom desktop” and for the command I put <code>/usr/bin/i3</code>.</p>
+<p>Frustratingly, I still had issues with the ssh keys.</p>
+<p>I had some issues, though. I would be able to ssh into my host through the cli, but whenever I tried to connect via the x2go client it would prompt me for the password 3 times and throw an error,</p>
+<pre><code>Access denied. Authentication that can continue:
+publickey</code></pre>
+<p>Finally, the solution was to delete the X2go session entry and retype the information from scratch.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

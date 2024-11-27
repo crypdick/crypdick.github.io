@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Richard Decal">
-<meta name="dcterms.date" content="2019-09-03">
+<meta name="dcterms.date" content="2024-11-06">
 
-<title>Installing Mosh server on AWS – Richard Decal</title>
+<title>This post should be hidden – Richard Decal</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -68,6 +68,7 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<meta name="quarto:status" content="draft">
 
 
 <link rel="stylesheet" href="../styles.css">
@@ -76,7 +77,7 @@ ul.task-list li input[type="checkbox"] {
 <body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner"><div id="quarto-draft-alert" class="alert alert-warning"><i class="bi bi-pencil-square"></i>Draft</div>
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -145,8 +146,8 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Installing Mosh server on AWS</h1>
-            <p class="subtitle lead">Also works for other VPS</p>
+      <h1 class="title">This post should be hidden</h1>
+            <p class="subtitle lead">A test</p>
                       </div>
   </div>
     
@@ -163,7 +164,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">September 3, 2019</p>
+        <p class="date">November 6, 2024</p>
       </div>
     </div>
     
@@ -182,21 +183,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p><a href="mosh.org">Mosh</a> (“mobile shell”) is an <code>ssh</code> alternative which is robust to network changes. It is super useful for working on a VPS when you are on a flaky connection or roaming. Here is how to install Mosh on an AWS EC2 instance.</p>
-<p>First, install and run mosh server:</p>
-<pre><code>sudo add-apt-repository ppa:keithw/mosh
-sudo apt-get update &amp;&amp; sudo apt-get upgrade
-sudo apt-get install mosh
-mosh-server  # start the server</code></pre>
-<p>Next, we need to open up firewall rules. I tried running the following code from another guide, which did not work:</p>
-<pre><code>sudo iptables -I INPUT 1 -p udp --dport 60000:61000 -j ACCEPT</code></pre>
-<p>Instead, I had to go to the AWS EC2 console and to open the rules. On the left, go to “Security Groups”. Select the group. Inside the Inbound tab, click “Edit” then “Add Rule”. You want the following settings:</p>
-<ul>
-<li>Type: “Custom UDP”</li>
-<li>Port Range: 60000 - 61000</li>
-<li>Source: leave alone (should automatically have “0.0.0.0/0; ::/0”)</li>
-</ul>
-<p>Save, and now you should be able to access your VPS with mosh. Good luck!</p>
+<p>This post should not appear in the frontpage.</p>
 
 
 
