@@ -46,3 +46,8 @@ Note that there are additional papers on meta-learning that are missing. If anyo
 
 * **Continuous Adaptation via Meta-Learning in Nonstationary and Competitive Environments.** Al-Shedivat et al. [[ArXiv]](https://arxiv.org/abs/1710.03641)
 * **Model-Agnostic Meta-Learning for Fast Adaptation of Deep Networks.** Chelsea Finn, Pieter Abbeel, Sergey Levine. [[Project page]](https://proceedings.mlr.press/v70/finn17a.html)
+
+Update 2024-12-05: I found an [interesting blog post](https://tensorlabbet.com/2024/11/11/lost-reading-items/) by Taro Langner  which was written a few weeks before mine. He speculates on the missing meta-learning papers, which I am listing below:
+
+* **Meta-Learning with Memory-Augmented Neural Networks** Adam Santoro, et al. [[ArXiv]](https://proceedings.mlr.press/v48/santoro16.pdf)
+* **Prototypical Networks for Few-shot Learning** Jake Snell, et al. [[ArXiv]](https://proceedings.neurips.cc/paper_files/paper/2017/file/cb8da6767461f2812ae4290eac7cbc42-Paper.pdf)
